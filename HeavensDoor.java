@@ -73,14 +73,14 @@ public class HeavensDoor {
         
         // Table headers
         System.out.println("Resident Information in " + residentialArea);
-        System.out.println("+----+---------------------------+-----+--------+--------------------+-------------------+----------+----------+----------+-----------+-----------------------+");
-        System.out.println("| No | Name                      | Age | Gender | Stand              | Destructive Power | Speed    | Range    | Stamina  | Precision | Development Potential |");
-        System.out.println("+----+---------------------------+-----+--------+--------------------+-------------------+----------+----------+----------+-----------+-----------------------+");
+        System.out.println("+----+---------------------------+-----+--------+------------------------+-------------------+----------+----------+----------+-----------+-----------------------+");
+        System.out.println("| No | Name                      | Age | Gender | Stand                  | Destructive Power | Speed    | Range    | Stamina  | Precision | Development Potential |");
+        System.out.println("+----+---------------------------+-----+--------+------------------------+-------------------+----------+----------+----------+-----------+-----------------------+");
 
         for(int row=0; row<residentsArray.length; row++)
             System.out.printf("| %2d | %-25s | %-3s | %-6s | %-18s | %-17s | %-8s | %-8s | %-8s | %-9s | %-21s |\n",
             (row+1), residentsArray[row][0], residentsArray[row][1], residentsArray[row][2], residentsArray[row][3], residentsArray[row][4], residentsArray[row][5], residentsArray[row][6], residentsArray[row][7], residentsArray[row][8], residentsArray[row][9]);
-        System.out.println("+----+---------------------------+-----+--------+--------------------+-------------------+----------+----------+----------+-----------+-----------------------+");
+        System.out.println("+----+---------------------------+-----+--------+------------------------+-------------------+----------+----------+----------+-----------+-----------------------+");
     }
     
     //Method to print resident profile
@@ -276,7 +276,7 @@ public class HeavensDoor {
     }
     
     //Method to get 2D-array of residents in the same residentialArea
-    private static String[][] residentsArray(String residentialArea){
+    public static String[][] residentsArray(String residentialArea){
         int rowSize = getResidentRow(residentialArea);
         String[][] residentsArray = new String[rowSize][10];
         
