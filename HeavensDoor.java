@@ -243,10 +243,11 @@ public class HeavensDoor {
     
     //Method to find whether is ascending and descending
     private static int compareOrder(String order){
-        if (order.equalsIgnoreCase("(ASC);")  || order.equalsIgnoreCase("(ascending);")){
+        order = order.toLowerCase();
+        if (order.contains("asc")){
             return 1;
         }
-        else if (order.equalsIgnoreCase("(DESC);")  || order.equalsIgnoreCase("(descending);")){
+        else if (order.contains("desc")){
             return -1;
         }
         return 0;
