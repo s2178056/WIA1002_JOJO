@@ -5,7 +5,7 @@ import java.util.*;
 
 public class PearlJam {
 
-    private static List<Resident> loadResidents() {
+    public static List<Resident> loadResidents() {
         List<Resident> residents = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader("combinedRS.csv"))) {
@@ -48,24 +48,87 @@ public class PearlJam {
         }
     }
 
-    private static Map<String, List<Resident>> assignFoodAndRestaurant(List<Resident> residents) {
+    public static Map<String, List<Resident>> assignFoodAndRestaurant(List<Resident> residents) {
         Map<String, List<Resident>> waitingLists = new HashMap<>();
-
         for (Resident resident : residents) {
             String restaurant = getRandomRestaurant();
             resident.setRestaurant(restaurant);
-
             List<MenuItem> menu = getRestaurantMenu(restaurant);
             MenuItem randomMenu = getRandomMenu(menu);
             resident.setMenu(randomMenu);
-
             List<Resident> waitingList = waitingLists.getOrDefault(restaurant, new ArrayList<>());
             waitingList.add(resident);
             waitingLists.put(restaurant, waitingList);
         }
-
         return waitingLists;
     }
+
+    // Declare the Resident object as an instance variable
+    private static Resident resident;
+
+    public static List<String[]> assignFoodAndRestaurantResident(String residentName, int dayCount) {
+        if (resident == null || !resident.getName().equals(residentName)) {
+            // Create a new resident if it doesn't exist or the name is different
+            resident = new Resident(residentName);
+        }
+        while(Resident.foodCount <=dayCount) {
+            String restaurant = getRandomRestaurant();
+            resident.setRestaurant(restaurant);
+            List<MenuItem> menu = getRestaurantMenu(restaurant);
+            MenuItem randomMenu = getRandomMenu(menu);
+            // Increment the day count and assign the corresponding food based on the day count
+            int assignedFoodIndex = Resident.foodCount % menu.size();
+            MenuItem assignedFood = menu.get(assignedFoodIndex);
+            // Add resident's assigned food to the resident's order history
+            String[] order = {Integer.toString(Resident.foodCount + 1), assignedFood.getName(), resident.getRestaurant()};
+            resident.addToOrderHistory(order);
+            Resident.foodCount++;
+        }
+        return resident.getOrderHistory();
+    }
+
+    public static List<String[]> assignFoodAndRestaurantJonathanJoestar(String residentName,int dayCount){
+        if (resident == null || !resident.getName().equals(residentName)) {
+            // Create a new resident if it doesn't exist or the name is different
+            resident = new Resident(residentName);
+        }
+        while(resident.foodCount<=dayCount) {
+            String restaurant = getRandomRestaurant();
+            resident.setRestaurant(restaurant);
+            List<MenuItem> menu = getRestaurantMenu(restaurant);
+            MenuItem randomMenu = getRandomMenu(menu);
+            // Increment the day count and assign the corresponding food based on the day count
+            int assignedFoodIndex = dayCount % menu.size();
+            MenuItem assignedFood = menu.get(assignedFoodIndex);
+            // Add resident's assigned food to the resident's order history
+            String[] order = {Integer.toString(resident.foodCount + 1), assignedFood.getName(), resident.getRestaurant()};
+            resident.addToOrderHistory(order);
+            resident.foodCount++;
+        }
+        return resident.getOrderHistory();
+    }
+
+    private static MenuItem findMenuItemByName(String foodName, List<MenuItem> menu) {
+        for (MenuItem food : menu) {
+            if (food.getName().equalsIgnoreCase(foodName)) {
+                return food;
+            }
+        }
+        return null;  // Return null if the food item is not found
+    }
+
+
+    public static void displayOrderHistory(List<String[]> orderHistoryList) {
+        System.out.println("Order History for Resident");
+        System.out.println("+-----+-------------------------------------+---------------------------+");
+        System.out.println("| Day | Food                                | Restaurant                |");
+        System.out.println("+-----+-------------------------------------+---------------------------+");
+        for (String[] orderEntry : orderHistoryList) {
+            System.out.printf("| %-3s | %-35s | %-25s |\n", orderEntry[0], orderEntry[1], orderEntry[2]);
+        }
+        System.out.println("+-----+-------------------------------------+---------------------------+");
+    }
+
 
     private static MenuItem getRandomMenu(List<MenuItem> menu) {
         if (menu.isEmpty()) {
@@ -135,11 +198,15 @@ public class PearlJam {
         return restaurants[randomIndex];
     }
 
-    private static List<Resident> getWaitingList(Map<String, List<Resident>> waitingLists, String restaurant) {
+    public static List<Resident> getRestaurantWaitingList(Map<String, List<Resident>> waitingLists, String restaurant) {
         return waitingLists.getOrDefault(restaurant, new ArrayList<>());
     }
 
-    private static List<Resident> generateOrderProcessingList(List<Resident> waitingList, String restaurant) {
+    public static List<Resident> getResidentWaitingList(Map<String, List<Resident>> waitingLists, String resident) {
+        return waitingLists.getOrDefault(resident, new ArrayList<>());
+    }
+
+    public static List<Resident> generateOrderProcessingList(List<Resident> waitingList, String restaurant) {
 
         List<Resident> orderProcessingList = new ArrayList<>();
 
@@ -292,44 +359,11 @@ public class PearlJam {
         return random.nextInt(10)+1;
     }
 
-    public static void main(String[] args) {
-        // Load residents' information from the CSV file
-        List<Resident> residents = loadResidents();
-
-        // Randomly assign a food and restaurant to each resident
-        Map<String, List<Resident>> waitingLists = assignFoodAndRestaurant(residents);
-
-        // Prompt for restaurant selection
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the number of the restaurant (1-5):");
-        int restaurantNumber = scanner.nextInt();
-
-        String restaurant = getRestaurantByNumber(restaurantNumber);
-        List<Resident> waitingList = getWaitingList(waitingLists, restaurant);
-        List<Resident> orderProcessingList = generateOrderProcessingList(waitingList, restaurant);
-
-        printWaitingList(waitingList, restaurant);
-        printOrderProcessingList(orderProcessingList, restaurant);
+    private static String getRestaurant(String restaurant) {
+        return restaurant;
     }
 
-    private static String getRestaurantByNumber(int restaurantNumber) {
-        switch (restaurantNumber) {
-            case 1:
-                return "Jade Garden";
-            case 2:
-                return "Cafe Deux Magots";
-            case 3:
-                return "Trattoria Trussardi";
-            case 4:
-                return "Libeccio";
-            case 5:
-                return "Savage Garden";
-            default:
-                return "";
-        }
-    }
-
-    private static void printWaitingList(List<Resident> waitingList, String restaurant) {
+    public static void printWaitingList(List<Resident> waitingList, String restaurant) {
         System.out.println("Restaurant: " + restaurant +"\n");
         System.out.println("Waiting List");
         System.out.println("+----+-------------------------+-----+--------+------------------------------------------+");
@@ -351,7 +385,7 @@ public class PearlJam {
         }
     }
 
-    private static void printOrderProcessingList(List<Resident> orderProcessingList, String restaurant) {
+    public static void printOrderProcessingList(List<Resident> orderProcessingList, String restaurant) {
         System.out.println("\nOrder Processing List");
         System.out.println("+----+-------------------------+-----+--------+------------------------------------------+");
         System.out.println("| No | Name                    | Age | Gender | Order                                    |");
@@ -371,19 +405,39 @@ public class PearlJam {
         } else {
             System.out.println("+----+-------------------------+-----+--------+------------------------------------------+");
         }
+        System.out.println("=====================================================================================================");
     }
 
     static class Resident {
         private String name;
         private String age;
         private String gender;
+        private double budget;
         private String restaurant;
         private MenuItem menu;
+        private List<String[]> orderHistory;
+        private Map<String, Integer> foodCounters;
+        private String lastRestaurant;
+        private static int foodCount;
+
 
         public Resident(String name, String age, String gender) {
             this.name = name;
             this.age = age;
             this.gender = gender;
+        }
+
+        public Resident(String name) {
+            this.name = name;
+            this.orderHistory = new ArrayList<>();
+            this.lastRestaurant="";
+            this.foodCounters=new HashMap<>();
+            foodCount=0;
+        }
+
+        public Resident(String name,double budget) {
+            this.name = name;
+            this.budget=budget;
         }
 
         public String getName() {
@@ -413,7 +467,40 @@ public class PearlJam {
         public void setMenu(MenuItem menuItem) {
             this.menu = menuItem;
         }
+
+        public void addToOrderHistory(String[] order) {
+            orderHistory.add(order);
+        }
+
+        public List<String[]> getOrderHistory() {
+            return orderHistory;
+        }
+
+        public String getLastRestaurant() {
+            return lastRestaurant;
+        }
+
+        public void setLastRestaurant(String lastRestaurant) {
+            this.lastRestaurant = lastRestaurant;
+        }
+        public void incrementFoodCounter(String food) {
+            foodCounters.put(food, foodCounters.getOrDefault(food, 0) + 1);
+        }
+
+        public int getFoodCounter(String food) {
+            return foodCounters.getOrDefault(food, 0);
+        }
+
+
+        public void removeOrderHistoryEntry(String day) {
+            Iterator<String[]> iterator = orderHistory.iterator();
+            while (iterator.hasNext()) {
+                String[] entry = iterator.next();
+                if (entry[0].equals(day)) {
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
     }
 }
-
-
