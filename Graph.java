@@ -151,12 +151,214 @@ public class Graph {
                 }
             }
         }
-
         currentPath.remove(current);
         visited.remove(current);
     }
 
-    protected static class Edge {
+    public List<Edge> findMinimumSpanningTree() {
+        List<Edge> minimumSpanningTree = new ArrayList<>();
+        List<Edge> allEdges = new ArrayList<>();
+        Set<String> visited = new HashSet<>();
+
+        // Collect all edges from the graph
+        for (List<Edge> edges : graph.values()) {
+            allEdges.addAll(edges);
+        }
+
+        // Sort edges in non-decreasing order of their weights
+        allEdges.sort(Comparator.comparingInt(edge -> edge.distance));
+
+        // Apply Kruskal's algorithm
+        for (Edge edge : allEdges) {
+            if (!visited.contains(edge.source) || !visited.contains(edge.destination)) {
+                minimumSpanningTree.add(edge);
+                visited.add(edge.source);
+                visited.add(edge.destination);
+            }
+        }
+
+        return minimumSpanningTree;
+    }
+
+    public void displayMinimumSpanningTree(List<Edge> minimumSpanningTree) {
+        System.out.println("Necessary Power Cables to be Upgraded:");
+        int totalDistance = 0;
+        for (Edge edge : minimumSpanningTree) {
+            System.out.printf("%s - %s (%d km)%n", edge.source, edge.destination, edge.distance);
+            totalDistance += edge.distance;
+        }
+        System.out.println("Total Length: " + totalDistance + " km");
+        System.out.println("=================================================================================");
+    }
+
+    public static List<Edge> Kruskal(List<Edge> edges) { //implement kruskal's logic
+
+        // Sort edges by weight
+        Collections.sort(edges);
+
+
+        List<String> vertices = new ArrayList<>(); //to store vertices
+        List<Integer> parent = new ArrayList<>();// to store parent of vertex
+
+        //to store the edges of the graph
+        List<Edge> kruskal = new ArrayList<>();
+
+        for (Edge edge : edges) {
+            String vertex1 = edge.source; //source
+            String vertex2 = edge.destination; //destination
+
+            int index1 = getIndex(vertices, vertex1);
+            int index2 = getIndex(vertices, vertex2);
+
+            //if vertex not found in the list
+            if (index1 == -1) {
+                vertices.add(vertex1);
+                parent.add(vertices.size() - 1);//adds to parent list as well
+                index1 = vertices.size() - 1;
+            }
+
+            if (index2 == -1) {
+                vertices.add(vertex2);
+                parent.add(vertices.size() - 1);
+                index2 = vertices.size() - 1;
+            }
+
+            //check if vertices belong to other vertices
+            int parent1 = find(parent, index1);
+            int parent2 = find(parent, index2);
+            if (parent1 != parent2) {
+                kruskal.add(edge);
+
+                //merge components
+                union(parent, parent1, parent2);
+            }
+        }
+
+        return kruskal;
+    }
+
+    public static List<Edge> nonKruskal(List<Edge> edges) {
+        // Sort edges by weight
+        Collections.sort(edges, Collections.reverseOrder());
+
+        List<String> vertices = new ArrayList<>(); // to store vertices
+        List<Integer> parent = new ArrayList<>();// to store parent of vertex
+        List<Edge> longestPath = new ArrayList<>();
+
+
+        List<Edge> kruskal = new ArrayList<>(); // to store the edges of the minimum spanning tree
+        List<Edge> nonMSTEdges = new ArrayList<>(); // to store the non-MST edges
+        Set<String> visitedEdges = new HashSet<>(); // to track visited edges
+
+        for (Edge edge : edges) {
+            String vertex1 = edge.source; // source
+            String vertex2 = edge.destination; // destination
+
+            int index1 = getIndex(vertices, vertex1);
+            int index2 = getIndex(vertices, vertex2);
+
+            // If vertex not found in the list
+            if (index1 == -1) {
+                vertices.add(vertex1);
+                parent.add(vertices.size() - 1); // adds to parent list as well
+                index1 = vertices.size() - 1;
+            }
+
+            if (index2 == -1) {
+                vertices.add(vertex2);
+                parent.add(vertices.size() - 1);
+                index2 = vertices.size() - 1;
+            }
+
+            // Check if vertices belong to other vertices
+            int parent1 = find(parent, index1);
+            int parent2 = find(parent, index2);
+            if (parent1 != parent2) {
+                longestPath.add(edge);
+
+                // merge components
+                union(parent, parent1, parent2);
+                visitedEdges.add(edge.source + "-" + edge.destination); // Mark the edge as visited
+            } else {
+                boolean reverseEdgeExists = false;
+                for (Edge nonMSTEdge : nonMSTEdges) {
+                    if (nonMSTEdge.source.equals(edge.destination) && nonMSTEdge.destination.equals(edge.source)) {
+                        reverseEdgeExists = true;
+                        break;
+                    }
+                }
+                // Check if the reverse edge has been visited
+                if (!visitedEdges.contains(edge.destination + "-" + edge.source)&&!reverseEdgeExists) {
+                    nonMSTEdges.add(edge);
+                }
+            }
+        }
+        return nonMSTEdges;
+    }
+
+    public static int getIndex(List<String> vertices, String vertex) {
+        for (int i = 0; i < vertices.size(); i++) {
+            if (vertices.get(i).equals(vertex)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static int find(List<Integer> parent, int vertex) {
+        //find the parent
+        if (parent.get(vertex) != vertex) { //check if have parent different from itself
+            parent.set(vertex, find(parent, parent.get(vertex))); //find all parents recursively
+        }
+        return parent.get(vertex);
+    }
+
+    public static void union(List<Integer> parent, int x, int y) {
+        parent.set(x, y); //set parent of vertex x to be vertex y
+    }
+
+    public void displayKruskal(){
+        List<Edge> edges=new ArrayList<>();
+        for (List<Edge> alledges : graph.values()) {
+            edges.addAll(alledges);
+        }
+        System.out.println("Necessary Power Cables to be Upgraded: ");
+        List<Edge> kruskal = Kruskal(edges);
+
+        int totalLength = 0 ;
+
+        for (int i = 0; i < kruskal.size(); i++) {
+            Edge edge = kruskal.get(i);
+            totalLength += edge.distance;
+            System.out.println((i + 1) + ". " + edge.source + " -- " + edge.destination + "(" + edge.distance + "km)");
+        }
+        System.out.println();
+        System.out.println("Total length: " +totalLength +"km");
+
+    }
+    public void displayNonKruskal(){
+        List<Edge> edges=new ArrayList<>();
+        for (List<Edge> alledges : graph.values()) {
+            edges.addAll(alledges);
+        }
+        System.out.println("Unnecessary Water Connections: ");
+        List<Edge> kruskal = nonKruskal(edges);
+
+        int totalLength = 0 ;
+
+        for (int i = 0; i < kruskal.size(); i++) {
+            Edge edge = kruskal.get(i);
+            totalLength += edge.distance;
+            System.out.println((i + 1) + ". " + edge.source + " -- " + edge.destination + "(" + edge.distance + "km)");
+        }
+        System.out.println();
+        System.out.println("Total length: " +totalLength +"km");
+
+    }
+
+
+
+    protected static class Edge implements Comparable<Edge> {
         String source;
         String destination;
         int distance;
@@ -166,5 +368,12 @@ public class Graph {
             this.destination = destination;
             this.distance = distance;
         }
+
+@Override
+        public int compareTo(Edge other) {
+            return this.distance - other.distance;
+        }
     }
-}
+    }
+
+
