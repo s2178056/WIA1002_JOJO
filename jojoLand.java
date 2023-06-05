@@ -1,25 +1,31 @@
+import java.io.IOException;
 import java.util.*;
 
+
 public class jojoLand {
-    private Graph map;
+    private static Graph map;
+    public int mapChoice;
     protected static Stack<String> historyStack = new Stack<>();
-    protected static Stack<String> forwardStack= new Stack<>();
+    protected static Stack<String> forwardStack = new Stack<>();
     private List<String> choices = new ArrayList<>();
     private static String currentLocation = "Town Hall";
     private static int dayCount = 0;
-    private HeavensDoor heavensDoor=new HeavensDoor();
-    private PearlJam pearlJam=new PearlJam();
+    private HeavensDoor heavensDoor = new HeavensDoor();
+    private PearlJam pearlJam = new PearlJam();
+    private AssignFood assignFood= new AssignFood();
+    public static int restaurantFoodCount=0;
 
 
     public jojoLand(Graph map) {
-       this.map=map;
+        this.map = map;
     }
 
-    public void run() {
+    public void run() throws IOException {
         Scanner sc = new Scanner(System.in);
         daysOfWeek();
         boolean quit = false;
         while (!quit) {
+            AssignFood.main(new String[]{});
             switch (currentLocation) {
                 case "Town Hall":
                     choices = map.getChoices(currentLocation);
@@ -29,11 +35,11 @@ public class jojoLand {
                     System.out.println("[2] Advance to Next Day");
                     System.out.println("[3] Save Game");
                     System.out.println("[4] Exit");
-                    if (!historyStack.isEmpty()){
+                    if (!historyStack.isEmpty()) {
                         System.out.println("[5] Back (" + viewBack() + ")");
                     }
-                    if(!forwardStack.empty()){
-                        System.out.println("[6] Forward ("+viewForward()+")");
+                    if (!forwardStack.empty()) {
+                        System.out.println("[6] Forward (" + viewForward() + ")");
                     }
                     System.out.print("Select: ");
                     String input = sc.nextLine();
@@ -43,7 +49,8 @@ public class jojoLand {
                             advanceToNextDay();
                             break;
                         case "3":
-                            saveGame();
+                            SaveLoad.saveGame(mapChoice, dayCount, PearlJam.Resident.getAllResidents());
+                            quit = true;
                             break;
                         case "4":
                             quit = true;
@@ -66,10 +73,11 @@ public class jojoLand {
                     System.out.println();
                     System.out.println("[2] View Resident Information");
                     System.out.println("[3] The Hand");
-                    System.out.println("[4] Back (" + viewBack() + ")");
-                    System.out.println("[5] Back to Town Hall");
-                    if(!forwardStack.empty()){
-                        System.out.println("[6] Forward ("+viewForward()+")");
+                    System.out.println("[4] Thus Spoke Rohan Kishibe");
+                    System.out.println("[5] Back (" + viewBack() + ")");
+                    System.out.println("[6] Back to Town Hall");
+                    if (!forwardStack.empty()) {
+                        System.out.println("[7] Forward (" + viewForward() + ")");
                     }
                     System.out.print("Select: ");
                     input = sc.nextLine();
@@ -79,29 +87,32 @@ public class jojoLand {
                             viewResidentInfo(currentLocation);
                             break;
                         case "3":
-                            System.out.println("Enter the locations: ");
-                            Scanner scanner = new Scanner(System.in);
-                            String[] locations = scanner.nextLine().split(", ");
-                            List<String> shortestPath = map.findShortestPathThroughALl(Arrays.asList(locations));
-                            if (shortestPath.isEmpty()) {
-                                System.out.println("No path found passing through all the locations.");
-                            } else {
-                                int distance = map.calculatePathDistance(shortestPath);
-                                System.out.println("Shortest Path:");
-                                for (int i = 0; i < shortestPath.size() - 1; i++) {
-                                    System.out.print(shortestPath.get(i) + " > ");
-                                }
-                                System.out.print(shortestPath.get(shortestPath.size() - 1));
-                                System.out.printf(" (%d km)%n", distance);
-                            }
+                            map.displayNonKruskal();
                             break;
                         case "4":
+                            System.out.print("Enter the locations: ");
+                            String allLocation = sc.nextLine();
+                            List<String> locations = Arrays.asList(allLocation.split(",\\s*"));
+                            String startNode = locations.get(0);
+                            List<String> endNodes = locations.subList(1, locations.size());
+                            Map<String, Integer> shortestDistances = Graph.dijkstra(startNode, endNodes);
+                            System.out.println("======================================================================");
+                            System.out.println("Shortest Path:");
+                            for (String endNode : endNodes) {
+                                int shortestDistance = shortestDistances.get(endNode);
+                                System.out.print(endNode + " > ");
+                            }
+//                            System.out.println(" (Distance: " + shortestDistance + " km)");
+                            System.out.println("======================================================================");
+                            break;
+
+                        case "5":
                             moveBack();
                             break;
-                        case "5":
+                        case "6":
                             backToTownHall();
                             break;
-                        case "6":
+                        case "7":
                             moveForward();
                             break;
                         default:
@@ -118,8 +129,8 @@ public class jojoLand {
                     System.out.println("[3] Red Hot Chili Pepper");
                     System.out.println("[4] Back (" + viewBack() + ")");
                     System.out.println("[5] Back to Town Hall");
-                    if(!forwardStack.empty()){
-                        System.out.println("[6] Forward ("+viewForward()+")");
+                    if (!forwardStack.empty()) {
+                        System.out.println("[6] Forward (" + viewForward() + ")");
                     }
                     System.out.print("Select: ");
                     input = sc.nextLine();
@@ -129,7 +140,7 @@ public class jojoLand {
                             viewResidentInfo(currentLocation);
                             break;
                         case "3":
-                            //Red Hot Chili Pepper
+                            map.displayKruskal();
                             break;
                         case "4":
                             moveBack();
@@ -154,8 +165,8 @@ public class jojoLand {
                     System.out.println("[3] Dirty Deeds Done Dirt Cheap");
                     System.out.println("[4] Back (" + viewBack() + ")");
                     System.out.println("[5] Back to Town Hall");
-                    if(!forwardStack.empty()){
-                        System.out.println("[6] Forward ("+viewForward()+")");
+                    if (!forwardStack.empty()) {
+                        System.out.println("[6] Forward (" + viewForward() + ")");
                     }
                     System.out.print("Select: ");
                     input = sc.nextLine();
@@ -184,7 +195,7 @@ public class jojoLand {
                 case "Jade Garden":
                 case "Cafe Deux Magots":
                 case "Trattoria Trussardi":
-                case "Liberrio":
+                case "Libeccio":
                 case "Savage Garden":
                     choices = map.getChoices(currentLocation);
                     System.out.println("Current Location: " + currentLocation);
@@ -196,22 +207,15 @@ public class jojoLand {
                     System.out.println("[5] Milagro Man");
                     System.out.println("[6] Back (" + viewBack() + ")");
                     System.out.println("[7] Back to Town Hall");
-                    if(!forwardStack.empty()){
-                        System.out.println("[8] Forward ("+viewForward()+")");
+                    if (!forwardStack.empty()) {
+                        System.out.println("[8] Forward (" + viewForward() + ")");
                     }
                     System.out.print("Select: ");
                     input = sc.nextLine();
                     System.out.println("=================================================================================");
                     switch (input) {
                         case "2":
-                            List<PearlJam.Resident> residents = pearlJam.loadResidents();
-                            // Randomly assign a food and restaurant to each resident
-                            Map<String, List<PearlJam.Resident>> waitingLists = pearlJam.assignFoodAndRestaurant(residents);
-                            // Prompt for restaurant selection
-                            List<PearlJam.Resident> waitingList = pearlJam.getWaitingList(waitingLists, currentLocation);
-                            List<PearlJam.Resident> orderProcessingList = pearlJam.generateOrderProcessingList(waitingList, currentLocation);
-                            pearlJam.printWaitingList(waitingList, currentLocation);
-                            pearlJam.printOrderProcessingList(orderProcessingList, currentLocation);
+                            pearlJam(currentLocation);
                             break;
                         case "3":
                             //View Menu
@@ -236,8 +240,48 @@ public class jojoLand {
                             break;
                     }
                     break;
-                case "Polnareff Land":
                 case "Joestar Mansion":
+                    choices = map.getChoices(currentLocation);
+                    System.out.println("Current Location: " + currentLocation);
+                    locationDisplay(choices);
+                    System.out.println();
+                    System.out.println("[2] View Resident Information");
+                    System.out.println("[3] The Golden Spirit");
+                    System.out.println("[4] Joestar Ancestor");
+                    System.out.println("[5] Back (" + viewBack() + ")");
+                    System.out.println("[6] Back to Town Hall");
+                    if (!forwardStack.empty()) {
+                        System.out.println("[7] Forward (" + viewForward() + ")");
+                    }
+                    System.out.print("Select: ");
+                    input = sc.nextLine();
+                    System.out.println("=================================================================================");
+                    switch (input) {
+                        case "2":
+                            viewResidentInfo(currentLocation);
+                            break;
+                        case"3":
+                            TheGoldenSpirit.main(new String[]{});
+                            break;
+                        case "4":
+                            joestarAncestor();
+                            break;
+                        case "5":
+                            moveBack();
+                            break;
+                        case "6":
+                            backToTownHall();
+                            break;
+                        case "7":
+                            moveForward();
+                            break;
+                        default:
+                            locationSelect(input, choices);
+                            break;
+                    }
+                    break;
+
+                case "Polnareff Land":
                 case "DIO's Mansion":
                 case "Vineyard":
                 case "San Giorgio Maggiore":
@@ -248,8 +292,8 @@ public class jojoLand {
                     System.out.println("[2] View Resident Information");
                     System.out.println("[3] Back (" + viewBack() + ")");
                     System.out.println("[4] Back to Town Hall");
-                    if(!forwardStack.empty()){
-                        System.out.println("[5] Forward ("+viewForward()+")");
+                    if (!forwardStack.empty()) {
+                        System.out.println("[5] Forward (" + viewForward() + ")");
                     }
                     System.out.print("Select: ");
                     input = sc.nextLine();
@@ -264,7 +308,7 @@ public class jojoLand {
                         case "4":
                             backToTownHall();
                             break;
-                        case"5":
+                        case "5":
                             moveForward();
                             break;
                         default:
@@ -279,8 +323,8 @@ public class jojoLand {
                     System.out.println();
                     System.out.println("[2] Back (" + viewBack() + ")");
                     System.out.println("[3] Back to Town Hall");
-                    if(!forwardStack.empty()){
-                        System.out.println("[4] Forward ("+viewForward()+")");
+                    if (!forwardStack.empty()) {
+                        System.out.println("[4] Forward (" + viewForward() + ")");
                     }
                     System.out.print("Select: ");
                     input = sc.nextLine();
@@ -301,7 +345,6 @@ public class jojoLand {
                     }
                     break;
             }
-
         }
     }
 
@@ -335,11 +378,7 @@ public class jojoLand {
     private void move(String destination) {
         historyStack.push(currentLocation);
         currentLocation = destination;
-    }
-
-    private void saveGame() {
-        // implementation of saving game
-        System.out.println("Game saved.");
+        forwardStack.clear();
     }
 
     public void daysOfWeek() {
@@ -404,6 +443,7 @@ public class jojoLand {
                     System.out.print("Enter the resident's name: ");
                     String name=sc.nextLine();
                     heavensDoor.printResidentProfile(name);
+                    PearlJam.displayOrderHistory(PearlJam.assignRF(name));
                     break;
                 case "2":
                     System.out.print("Enter the sorting order: ");
@@ -422,6 +462,17 @@ public class jojoLand {
                     break;
             }
         }
+    }
+
+    public void pearlJam(String currentLocation){
+        List<PearlJam.Resident> residents = pearlJam.loadResidents();
+        // Randomly assign a food and restaurant to each resident
+        Map<String, List<PearlJam.Resident>> waitingLists = pearlJam.assignFoodAndRestaurant(residents,dayCount);
+        // Prompt for restaurant selection
+        List<PearlJam.Resident> waitingList = pearlJam.getRestaurantWaitingList(waitingLists, currentLocation);
+        List<PearlJam.Resident> orderProcessingList = pearlJam.generateOrderProcessingList(waitingList, currentLocation);
+        pearlJam.printWaitingList(waitingList, currentLocation);
+        pearlJam.printOrderProcessingList(orderProcessingList, currentLocation);
     }
 
     public void dirtyDeedsDoneDirtCheap() {
@@ -456,7 +507,19 @@ public class jojoLand {
         Stack<String> saveHistoryStack = historyStack;
         return saveHistoryStack;
     }
+
+    public void setDayCount(int dayCount) {
+        jojoLand.dayCount = dayCount;
+    }
+
+    public void joestarAncestor(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the name of Joestar to print his/her ancestor: ");
+        String joestarName=sc.nextLine();
+        TheGoldenSpirit.printAncestor(joestarName);
+    }
 }
+
 
 
 
