@@ -36,7 +36,7 @@ public class AssignFood {
         menu.clear();
         menuRunThrough();
        int jotaroRestaurantIndex = 0;
-        for (int i = 0; i <jojoLand.getDayCount(); i++) {
+        for (int i = 0; i <=jojoLand.getDayCount(); i++) {
             BufferedReader br = new BufferedReader(new FileReader("combinedRS.csv"));
             while ((line = br.readLine()) != null) {
                 if (linesToSkip > 0) {
