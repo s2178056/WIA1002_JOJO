@@ -6,9 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-
 public class AssignFood {
-    static List<MenuItem> menu = new ArrayList<>();
+    static List<MenuItem> jotaroMenu = new ArrayList<>();
     static List<MenuItem> checkMenu=new ArrayList<>();
     static ArrayList<String> allMenu=new ArrayList<>();
     static int restaurantCounter = 0;
@@ -29,14 +28,15 @@ public class AssignFood {
         int linesToSkip = 2;
         String line;
         ArrayList<String> jonathanFoodList = new ArrayList<>();
-        ArrayList<String> josepshFoodList = new ArrayList<>();
+        ArrayList<String> josephFoodList = new ArrayList<>();
         double josukeWeeklyBudget=100;
-        menu.clear();
+        jotaroMenu.clear();
         menuRunThrough();
        int jotaroRestaurantIndex = 0;
-        for (int i = 0; i <=10; i++) {
+        for (int i=0;i<=jojoLand.getDayCount();i++) {
             BufferedReader br = new BufferedReader(new FileReader("combinedRS.csv"));
             while ((line = br.readLine()) != null) {
+                ArrayList<String> menuCheck=allMenu;
                 if (linesToSkip > 0) {
                     linesToSkip--;
                     continue;
@@ -47,7 +47,7 @@ public class AssignFood {
                 String gender = data[2].trim();
                 switch (name) {
                     case "Jonathan Joestar":
-                        ArrayList<String> menuCheck=allMenu;
+                        menuCheck = new ArrayList<>(allMenu); // Initialize menuCheck with allMenu at the beginning of each iteration
                         boolean menuSatisfiesFrequency = false;
                         do {
                             String restaurant = getRandomRestaurant();
@@ -57,48 +57,54 @@ public class AssignFood {
                             double price = randomMenu.getPrice();
                             if (checkBalanceFrequency(jonathanFoodList, foodName)||menuCheck.isEmpty()) {
                                 jonathanFoodList.add(foodName);
-                                menuCheck.remove(randomMenu);
-                                writer.write(String.format("%d,%s,%s,%s,%s,%s,%s\n", i + 1, name, age, gender, restaurant, randomMenu, price));
+                                writer.write(String.format("%d,%s,%s,%s,%s,%s,%s\n", i + 1, name, age, gender, restaurant, foodName, price));
                                 menuSatisfiesFrequency = true;
+                            }
+                            if(!menuCheck.isEmpty()) {
+                                menuCheck.remove(randomMenu.getName());
                             }
                         } while (!menuSatisfiesFrequency);
                         break;
                     case "Joseph Joestar":
-                        menuCheck=allMenu;
+                        menuCheck = new ArrayList<>(allMenu); // Initialize menuCheck with allMenu at the beginning of each iteration
                         boolean menuSatisfies = false;
                         do {
                             String restaurant = getRandomRestaurant();
                             List<MenuItem> menu = MenuItem.getRestaurantMenu(restaurant);
                             MenuItem randomMenu = MenuItem.getRandomMenu(menu);
-                            String foodName=randomMenu.getName();
+                            String foodName = randomMenu.getName();
                             double price = randomMenu.getPrice();
-                            if (checkRepeat(josepshFoodList, foodName)||menuCheck.isEmpty()) {
-                                josepshFoodList.add(foodName);
-                                menuCheck.remove(randomMenu);
+                            if (checkRepeat(josephFoodList, foodName) || menuCheck.isEmpty()) {
+                                josephFoodList.add(foodName);
                                 writer.write(String.format("%d,%s,%s,%s,%s,%s,%s\n", i + 1, name, age, gender, restaurant, foodName, price));
                                 menuSatisfies = true;
+                            }
+                            if (!menuCheck.isEmpty()) {
+                                menuCheck.remove(foodName);
+                            } else {
+                                josephFoodList.clear();
                             }
                         } while (!menuSatisfies);
                         break;
                     case "Jotaro Kujo":
-                        if (menu.isEmpty()) {
-                            menu = MenuItem.getRestaurantMenu(getIndexRestaurant(jotaroRestaurantIndex));
+                        if (jotaroMenu.isEmpty()) {
+                            jotaroMenu = MenuItem.getRestaurantMenu(getIndexRestaurant(jotaroRestaurantIndex));
                         }
-                        MenuItem randomMenuItem = MenuItem.getRandomMenu(menu);
+                        MenuItem randomMenuItem = MenuItem.getRandomMenu(jotaroMenu);
                         String foodName = randomMenuItem.getName();
                         double price = randomMenuItem.getPrice();
-                        writer.write(String.format("%d,%s,%s,%s,%s,%s,%s\n", i + 1, name, age, gender, getIndexRestaurant(jotaroRestaurantIndex), foodName, price));
-                        menu.remove(randomMenuItem); // Remove the selected menu item from the list
-                        if (menu.isEmpty()) {
+                        writer.write(String.format("%d,%s,%s,%s,%s,%s,%s\n", i+ 1, name, age, gender, getIndexRestaurant(jotaroRestaurantIndex), foodName, price));
+                        jotaroMenu.remove(randomMenuItem); // Remove the selected menu item from the list
+                        if (jotaroMenu.isEmpty()) {
                             jotaroRestaurantIndex++;
-                            menu = MenuItem.getRestaurantMenu(getIndexRestaurant(jotaroRestaurantIndex));
                             if (jotaroRestaurantIndex > 4) {
                                 jotaroRestaurantIndex = 0;
                             }
+                            jotaroMenu = MenuItem.getRestaurantMenu(getIndexRestaurant(jotaroRestaurantIndex));
                         }
                         break;
                     case "Josuke Higashikata":
-                        menuCheck=allMenu;
+                        menuCheck = new ArrayList<>(allMenu); // Initialize menuCheck with allMenu at the beginning of each iteration
                         boolean josukeSatisfy = false;
                         if(i%7==0){
                             josukeWeeklyBudget=100;
@@ -110,11 +116,16 @@ public class AssignFood {
                         foodName=randomMenu.getName();
                         price = randomMenu.getPrice();
                         if(josukeWeeklyBudget>price||menuCheck.isEmpty()) {
-                            menuCheck.remove(randomMenu);
+                            if(!menuCheck.isEmpty()) {
+                                menuCheck.remove(foodName);
+                            }
                             writer.write(String.format("%d,%s,%s,%s,%s,%s,%s\n", i + 1, name, age, gender, restaurant, foodName, price));
                             josukeWeeklyBudget-=price;
                             josukeSatisfy=true;
                         }
+                            if(!menuCheck.isEmpty()) {
+                                menuCheck.remove(randomMenu.getName());
+                            }
                         }while(!josukeSatisfy);
                         break;
                     case "Giorno Giovanna":
@@ -150,8 +161,8 @@ public class AssignFood {
                     case "Jolyne Cujoh":
                         boolean jolyneSatisfy=false;
                         if (i%7==6){
-                             List<MenuItem> scMenu = MenuItem.getRestaurantMenu(getIndexRestaurant(jotaroRestaurantIndex));
-                            MenuItem randomMenu = MenuItem.getRandomMenu(menu);
+                            List<MenuItem> scMenu = MenuItem.getRestaurantMenu(getIndexRestaurant(jotaroRestaurantIndex));
+                            MenuItem randomMenu = MenuItem.getRandomMenu(scMenu);
                             foodName=randomMenu.getName();
                             price = randomMenu.getPrice();
                                 jolnyeLastRestaurant.push(getIndexRestaurant(jotaroRestaurantIndex));
@@ -166,7 +177,7 @@ public class AssignFood {
                                     MenuItem randomMenu = MenuItem.getRandomMenu(menu);
                                     foodName=randomMenu.getName();
                                     price = randomMenu.getPrice();
-                                    writer.write(String.format("%d,%s,%s,%s,%s,%s,%s\n", i + 1, name, age, gender, restaurant, foodName, price));
+                                    writer.write(String.format("%d,%s,%s,%s,%s,%s,%s\n", i+ 1, name, age, gender, restaurant, foodName, price));
                                     jolyneSatisfy = true;
                                 }
                             } while (!jolyneSatisfy);
@@ -188,7 +199,8 @@ public class AssignFood {
 
 
     private static String getRandomRestaurant() {
-        int randomIndex = (int) (Math.random() *restaurants.length);
+        Random rng = new Random();
+        int randomIndex = rng.nextInt(restaurants.length);
         return restaurants[randomIndex];
     }
 
