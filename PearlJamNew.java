@@ -180,7 +180,7 @@ public class PearlJamNew {
     }
 
     private static int getDayCount() {   //*** to amend
-        return 1;
+        return jojoLand.getDayCount();
     }
 
 
