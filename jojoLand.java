@@ -13,7 +13,7 @@ public class jojoLand {
     private HeavensDoor heavensDoor = new HeavensDoor();
     private PearlJam pearlJam = new PearlJam();
     private AssignFood assignFood= new AssignFood();
-    public static int restaurantFoodCount=0;
+    public static int foodCount=0;
 
 
     public jojoLand(Graph map) {
@@ -49,7 +49,7 @@ public class jojoLand {
                             advanceToNextDay();
                             break;
                         case "3":
-                            SaveLoad.saveGame(mapChoice, dayCount, PearlJam.Resident.getAllResidents());
+                            SaveLoad.saveGame(mapChoice, dayCount);
                             quit = true;
                             break;
                         case "4":
@@ -91,21 +91,15 @@ public class jojoLand {
                             break;
                         case "4":
                             System.out.print("Enter the locations: ");
-                            String allLocation = sc.nextLine();
-                            List<String> locations = Arrays.asList(allLocation.split(",\\s*"));
-                            String startNode = locations.get(0);
-                            List<String> endNodes = locations.subList(1, locations.size());
-                            Map<String, Integer> shortestDistances = Graph.dijkstra(startNode, endNodes);
-                            System.out.println("======================================================================");
-                            System.out.println("Shortest Path:");
-                            for (String endNode : endNodes) {
-                                int shortestDistance = shortestDistances.get(endNode);
-                                System.out.print(endNode + " > ");
-                            }
-//                            System.out.println(" (Distance: " + shortestDistance + " km)");
-                            System.out.println("======================================================================");
-                            break;
+                            List<String> locations = new ArrayList<>();
+                            locations.add("Jade Garden");
+                            locations.add("Libeccio");
+                            locations.add("Vineyard");
+                            List<List<String>> allPaths = map.findAllPaths("Source", locations);
+                            List<List<String>> topShortestPaths = map.findTopShortestPaths(allPaths);
 
+                            map.displayShortestPaths(topShortestPaths);
+                            break;
                         case "5":
                             moveBack();
                             break;
@@ -443,7 +437,7 @@ public class jojoLand {
                     System.out.print("Enter the resident's name: ");
                     String name=sc.nextLine();
                     heavensDoor.printResidentProfile(name);
-                    PearlJam.displayOrderHistory(PearlJam.assignRF(name));
+                    PearlJam.assignRF(name);
                     break;
                 case "2":
                     System.out.print("Enter the sorting order: ");
