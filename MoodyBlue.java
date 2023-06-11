@@ -26,7 +26,7 @@ public class MoodyBlue {
         Scanner input = new Scanner(System.in);
         boolean exit=false;
         while(!exit) {
-            System.out.println("======================================================================");
+            System.out.println("==============================================================================");
             System.out.println("Restaurant: " + jojoLand.getCurrentLocation());
             System.out.println("Sales Information");
             System.out.println("[1] View Sales");
@@ -46,6 +46,10 @@ public class MoodyBlue {
                     System.out.print("Enter the day: ");
                     int selectedDay = scanner.nextInt();
                     scanner.nextLine();
+                    if (selectedDay>jojoLand.getDayCount()+1){
+                        System.out.println("Invalid Day");
+                        break;
+                    }
                     System.out.println("Restaurant: "+jojoLand.getCurrentLocation());
                     System.out.println("Day "+selectedDay+" Sales");
                     System.out.println("+-------------------------------------+------------+-----------------+");
@@ -77,6 +81,10 @@ public class MoodyBlue {
                     System.out.print("Enter the end day: ");
                     int endDay = scanner.nextInt();
                     scanner.nextLine();
+                    if (endDay>jojoLand.getDayCount()+1||startDay<=0){
+                        System.out.println("Invalid Day");
+                        break;
+                    }
                     Map<Integer, Double> sales = new HashMap<>();
                     Map<String, Integer> foodQuantity = new HashMap<>();
                     Map<String, Double> foodPrice = new HashMap<>();
@@ -132,6 +140,10 @@ public class MoodyBlue {
                     System.out.print("Enter The End Day: ");
                     int endDay = scanner.nextInt();
                     scanner.nextLine();
+                    if (endDay>jojoLand.getDayCount()+1||startDay<=0){
+                        System.out.println("Invalid Day");
+                        break;
+                    }
                     Map<Integer, Double> sales = new HashMap<>();
                     Map<String, Integer> foodQuantity = new HashMap<>();
                     Map<String, Double> foodPrice = new HashMap<>();
@@ -186,6 +198,10 @@ public class MoodyBlue {
                     System.out.print("Enter The End Day: ");
                     int endDay = scanner.nextInt();
                     scanner.nextLine();
+                    if (endDay>jojoLand.getDayCount()+1||startDay<=0){
+                        System.out.println("Invalid Day");
+                        break;
+                    }
                     Map<String, Integer> foodQuantity = new HashMap<>();
                     Map<String, Double> foodPrice = new HashMap<>();
                     int kFoodQuantity = 0;
@@ -238,6 +254,10 @@ public class MoodyBlue {
                     System.out.print("Enter The End Day: ");
                     int endDay = scanner.nextInt();
                     scanner.nextLine();
+                    if (endDay>jojoLand.getDayCount()+1||startDay<=0){
+                        System.out.println("Invalid Day");
+                        break;
+                    }
                     Map<String, Integer> foodQuantity = new HashMap<>();
                     Map<String, Double> foodPrice = new HashMap<>();
                     double totalSales=0.00;
