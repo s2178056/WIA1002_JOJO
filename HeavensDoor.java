@@ -1,49 +1,45 @@
-
-package heavensdoor;
-
 import java.io.IOException;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
 
 
 public class HeavensDoor {
+    public PearlJam pearlJam= new PearlJam();
 
-    public static void main(String[] args) {
-        
+    public void main() {
+
         printResidentProfile("Joseph Joestar");
         printResidentInfo(residentsArray("San Giorgio Maggiore"), "San Giorgio Maggiore");
         sort("Age (ASC); Precision (DESC); Stand (ASC);", "San Giorgio Maggiore");
-        
+
     }
-    
+
     //Method for sorting and printing the table
     public static void sort(String sortingOrder, String residentialArea){
         String split[] = sortingOrder.split(" ");
         String[][] ary = residentsArray(residentialArea);
-        
         int numOfField = split.length/2;
         int categoryIdx = 0;
         int orderIdx = 0;
         int categories[] = new int[numOfField];
         int orders[] = new int [numOfField];
-        
         for(int i=0; i<split.length; i++){
-            
             //To find category index in the array for each sorting according to the sorting priority
             int idxToSkip = -1;
             if(i%2 == 0){
                 int category = findCategoryIndex(split[i]);
                 if(category > 0){
                     categories[categoryIdx] = category;
-                    categoryIdx++;                
+                    categoryIdx++;
                 }
                 else {
                     System.out.println("Invalid Field's Name > " + category);
                     idxToSkip = (i+1);
                 }
             }
-            
             //To find whether is asc or desc for each sorting
             else {
                 if(i == idxToSkip){
@@ -51,26 +47,23 @@ public class HeavensDoor {
                 }
                 int order = compareOrder(split[i]);
                 orders[orderIdx] = order;
-                orderIdx++;                
+                orderIdx++;
             }
-        }  
-        
+        }
         //Swap for the first field
         swapFirstField(ary, categories[0], orders[0]);
-        
         //Swap for the rest of the field
         if(categoryIdx>0){
             for(int i=1; i<numOfField; i++){
                 swapOtherField(ary, categories[i-1], categories[i], orders[i]);
             }
         }
-        
         printResidentInfo(ary, residentialArea);
     }
-    
+
     //Method to print resident infomation
     public static void printResidentInfo (String[][] residentsArray, String residentialArea){
-        
+
         // Table headers
         System.out.println("Resident Information in " + residentialArea);
         System.out.println("+----+---------------------------+-----+--------+------------------------+-------------------+----------+----------+----------+-----------+-----------------------+");
@@ -78,26 +71,22 @@ public class HeavensDoor {
         System.out.println("+----+---------------------------+-----+--------+------------------------+-------------------+----------+----------+----------+-----------+-----------------------+");
 
         for(int row=0; row<residentsArray.length; row++)
-            System.out.printf("| %2d | %-25s | %-3s | %-6s | %-18s | %-17s | %-8s | %-8s | %-8s | %-9s | %-21s |\n",
-            (row+1), residentsArray[row][0], residentsArray[row][1], residentsArray[row][2], residentsArray[row][3], residentsArray[row][4], residentsArray[row][5], residentsArray[row][6], residentsArray[row][7], residentsArray[row][8], residentsArray[row][9]);
+            System.out.printf("| %2d | %-25s | %-3s | %-6s | %-22s | %-17s | %-8s | %-8s | %-8s | %-9s | %-21s |\n",
+                    (row+1), residentsArray[row][0], residentsArray[row][1], residentsArray[row][2], residentsArray[row][3], residentsArray[row][4], residentsArray[row][5], residentsArray[row][6], residentsArray[row][7], residentsArray[row][8], residentsArray[row][9]);
         System.out.println("+----+---------------------------+-----+--------+------------------------+-------------------+----------+----------+----------+-----------+-----------------------+");
     }
-    
-    //Method to print resident profile
-    public static void printResidentProfile (String name){
-       
-        System.out.println("======================================================");
-        System.out.println(name + "'s Profile");
-        System.out.println("======================================================");
 
+    //Method to print resident profile
+    public void printResidentProfile (String name){
+        boolean found=false;
         try(BufferedReader read = new BufferedReader(new FileReader("combinedRS.csv"))){
             String line;
-            
             while((line = read.readLine()) != null){
-                
                 String[] split = line.split(",");
-                
-                if(split[0].equalsIgnoreCase(name)){   
+                if(split[0].equalsIgnoreCase(name)){
+                    System.out.println("======================================================");
+                    System.out.println(name + "'s Profile");
+                    System.out.println("======================================================");
                     System.out.printf("Name%18s:%s\n", " ", split[0]);
                     System.out.printf("Age%19s:%s\n", " ", split[1]);
                     System.out.printf("Gender%16s:%s\n", " ", split[2]);
@@ -109,21 +98,25 @@ public class HeavensDoor {
                     System.out.printf("Stamina%15s:%s\n", " ", split[9]);
                     System.out.printf("Precision%13s:%s\n", " ", split[10]);
                     System.out.printf("Development Potential%1s:%s\n", " ", split[11]);
-                    System.out.println("======================================================");                    
+                    System.out.println("======================================================");
+                    found=true;
+                    read.close();
+                    break;
                 }
             }
-            
-            read.close();
+            if (!found){
+                System.out.println("Resident Not Found");
+            }
         } catch (FileNotFoundException e) {
             System.out.println("File was not found!");
         } catch (IOException e){
             System.out.println("Error reading from file.");
         }
     }
-    
+
     //To compare other field's value in one column and swap the whole rows according to the column
     private static String[][] swapOtherField(String[][] array, int fieldBefore, int currentField, int order) {
-    int rows = array.length;
+        int rows = array.length;
 
         for (int i = 0; i < rows - 1; i++) {
             for (int j = 0; j < rows - i - 1; j++) {
@@ -154,10 +147,10 @@ public class HeavensDoor {
         return array;
     }
 
-    
+
     //To compare first field's value in one column and swap the whole rows according to the column
     private static String[][] swapFirstField(String[][] array, int column, int order) {
-    int rows = array.length;
+        int rows = array.length;
 
         for (int i = 0; i < rows - 1; i++) {
             for (int j = 0; j < rows - i - 1; j++) {
@@ -181,14 +174,14 @@ public class HeavensDoor {
         }
         return array;
     }
-    
+
     //To compare two string
     private static int comparable(String value1, String value2){
         if(value1.equalsIgnoreCase("n/a")||value1.equalsIgnoreCase("null")){return 1;}
         else if(value2.equalsIgnoreCase("n/a")||value2.equalsIgnoreCase("null")){return -1;}
         else return value1.compareTo(value2);
     }
-    
+
     //To compare Age parameter
     //if age1 smaller -1
     private static int comparableAge(String age1, String age2){
@@ -198,14 +191,14 @@ public class HeavensDoor {
         else if(Integer.parseInt(age1) < Integer.parseInt(age2)){return -1;}
         else return 0;
     }
-      
+
     //To compare Stand parameter
     private static int comparableStand(String stand1, String stand2){
         if (numeriseStand(stand1) > numeriseStand(stand2)){return 1;}
         else if (numeriseStand(stand1) < numeriseStand(stand2)){return -1;}
         else return 0;
     }
-    
+
     //To numerise Stand parameter according to the order > Infinity, A, B, C, D, E, ?, and Null
     private static int numeriseStand(String stand){
         switch (stand.toLowerCase()) {
@@ -218,11 +211,11 @@ public class HeavensDoor {
             case "?" -> {return 6;}
             case "null" -> {return 7;}
             case "n/a" -> {return 7;}
-            
+
             default -> {return -1;}
         }
     }
-        
+
     //Find category index
     private static int findCategoryIndex(String category){
         switch (category.toLowerCase()) {
@@ -236,11 +229,11 @@ public class HeavensDoor {
             case "stamina" -> {return 7;}
             case "precision" -> {return 8;}
             case "development potential" -> {return 9;}
-            
+
             default -> {return -1;}
         }
-    }   
-    
+    }
+
     //Method to find whether is ascending and descending
     private static int compareOrder(String order){
         order = order.toLowerCase();
@@ -248,22 +241,22 @@ public class HeavensDoor {
         else if (order.contains("desc")){return -1;}
         return 0;
     }
-    
-    //Method to count total row for residents in a specific area        
+
+    //Method to count total row for residents in a specific area
     private static int getResidentRow(String residentialArea){
         int rowSize = 0;
-        
+
         try(BufferedReader read = new BufferedReader(new FileReader("combinedRS.csv"))){
-             
+
             //find row size
             String rowLine;
-            
+
             while((rowLine = read.readLine()) != null){
                 String[] split = rowLine.split(",");
-                
+
                 if(split[3].equalsIgnoreCase(residentialArea)){rowSize++;}
             }
-              read.close();
+            read.close();
         } catch (FileNotFoundException e) {
             System.out.println("File was not found!");
         } catch (IOException e){
@@ -271,21 +264,21 @@ public class HeavensDoor {
         }
         return rowSize;
     }
-    
+
     //Method to get 2D-array of residents in the same residentialArea
     public static String[][] residentsArray(String residentialArea){
         int rowSize = getResidentRow(residentialArea);
         String[][] residentsArray = new String[rowSize][10];
-        
+
         try(BufferedReader read = new BufferedReader(new FileReader("combinedRS.csv"))){
             String line;
             int row = 0;
-            
+
             while((line = read.readLine()) != null){
-                
+
                 String[] split = line.split(",");
                 int col = 0;
-                
+
                 if(split[3].equalsIgnoreCase(residentialArea)){
                     for(int j=0; j<12; j++){
                         if(j==3 || j==4) {continue;}
@@ -296,7 +289,7 @@ public class HeavensDoor {
                     row++;
                 }
             }
-            
+
             read.close();
         } catch (FileNotFoundException e) {
             System.out.println("File was not found!");
@@ -305,4 +298,8 @@ public class HeavensDoor {
         }
         return residentsArray;
     }
+
+
+
 }
+
