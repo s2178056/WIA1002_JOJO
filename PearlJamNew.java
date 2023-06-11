@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.*;
 
 public class PearlJamNew {
@@ -21,12 +22,14 @@ public class PearlJamNew {
                     String age = data[2].trim();
                     String gender = data[3].trim();
                     String order = data[5].trim();
-                    waitingList.add(new Resident(name, age, gender, order));
+                    LocalTime time = LocalTime.parse(data[7].trim());
+                    waitingList.add(new Resident(name, age, gender, order,time));
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        waitingList.sort(Comparator.comparing(Resident::getTime));
         return waitingList;
     }
 
@@ -179,7 +182,7 @@ public class PearlJamNew {
     }
 
     private static int getDayCount() {   //*** to amend
-        return 2;
+        return 1;
     }
 
 
@@ -224,11 +227,12 @@ public class PearlJamNew {
     }
 
     public static void main(String[] args) {   //*** to amend
-        String restaurant = "Savage Garden";  // to amend
+        String restaurant = "Jade Garden";  // to amend
         int day = getDayCount();
         System.out.println("Restaurant: " + restaurant + "\n");
-        printWaitingList(getWaitingList(day, restaurant));
-        printOrderProcessingList(generateOrderProcessingList(getWaitingList(day,restaurant),restaurant));
+        List<Resident> waitingList = getWaitingList(day, restaurant);
+        printWaitingList(waitingList);
+        printOrderProcessingList(generateOrderProcessingList(waitingList,restaurant));
     }
 
 
@@ -239,16 +243,18 @@ public class PearlJamNew {
         private String gender;
         private String restaurant;
         private String order;
+        LocalTime time;
 //        private static List<String[]> orderHistory;
 //        private Map<String, Integer> foodCounters;
 //        private String lastRestaurant;
 //        private int foodCount;
 
-        public Resident(String name, String age, String gender,String order) {
+        public Resident(String name, String age, String gender,String order,LocalTime time) {
             this.name = name;
             this.age = age;
             this.gender = gender;
             this.order = order;
+            this.time = time;
         }
 
 //        public Resident(String name) {
@@ -283,7 +289,7 @@ public class PearlJamNew {
 
         public String getOrder(){return order;}
 
-
+        public LocalTime getTime(){return time;}
 //        public MenuItem getMenu() {
 //            return menu;
 //        }
