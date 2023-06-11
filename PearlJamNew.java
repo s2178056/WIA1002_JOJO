@@ -11,9 +11,7 @@ public class PearlJamNew {
         List<Resident> waitingList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("foodHistory.csv"))) {
             String line;
-            br.readLine();
             while ((line = br.readLine()) != null) {
-
                 String[] data = line.split(",");
                 int day = Integer.parseInt(data[0].trim());
                 String rest = data[4].trim();
