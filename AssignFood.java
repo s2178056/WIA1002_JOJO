@@ -25,7 +25,6 @@ public class AssignFood {
     public static void main(String[] args) throws IOException, FileNotFoundException {
         BufferedWriter writer = new BufferedWriter(new FileWriter("foodHistory.csv"));
         writer.write("Day,Name,Age,Gender,Restaurant,Food,Price\n");
-        int linesToSkip = 2;
         String line;
         ArrayList<String> jonathanFoodList = new ArrayList<>();
         ArrayList<String> josephFoodList = new ArrayList<>();
@@ -34,6 +33,7 @@ public class AssignFood {
         menuRunThrough();
        int jotaroRestaurantIndex = 0;
         for (int i=0;i<=jojoLand.getDayCount();i++) {
+            int linesToSkip = 2;
             BufferedReader br = new BufferedReader(new FileReader("combinedRS.csv"));
             while ((line = br.readLine()) != null) {
                 ArrayList<String> menuCheck=allMenu;
