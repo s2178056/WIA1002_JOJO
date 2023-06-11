@@ -13,14 +13,15 @@ class VentoAureo {
         while (!uncategorized.isEmpty() || districts.size() > 1) {
             System.out.print("Combine: ");
             String line = scanner.nextLine();
-            if (line.equalsIgnoreCase("exit")) {
+            if (line.equalsIgnoreCase("exit") || line.equalsIgnoreCase(" exit") || line.equalsIgnoreCase("exit ") ) {
+                System.out.println("=============================================================================================================");
                 break;
             }
             String[] arr = line.split(" & ");
             String location1 = arr[0];
             String location2 = arr[1];
             combineLocations(location1, location2);
-            System.out.println("======================================================================");
+            System.out.println("=============================================================================================================");
         }
     }
 
@@ -56,6 +57,12 @@ class VentoAureo {
     }
 
     private static void combineLocations(String location1, String location2) {
+
+        if (!roads.containsKey(location1) || !roads.containsKey(location2)) {
+            System.out.println("Invalid input: One or both locations do not match any town.");
+            return;
+        }
+
         if (!areConnected(location1, location2)) {
             System.out.println(location1 + " and " + location2 + " are not connected by a road!");
             return;
@@ -128,7 +135,9 @@ class VentoAureo {
             System.out.println("Uncategorised: " + uncategorized + " (" + uncategorized.size() + " locations)");
         }
 
-        if(uncategorized.size() == 0 && (districtIndex-1) == 1)
+        if(uncategorized.size() == 0 && (districtIndex-1) == 1) {
+            System.out.println("=============================================================================================================");
             System.exit(0);
+        }
     }
 }
