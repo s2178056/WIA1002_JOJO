@@ -1,0 +1,33 @@
+BF 1: jojoLand class,Graph class
+BF 2: HeavensDoor class [viewResidentInfo]
+BF 3: PearlJam class, AssignFood Class, foodHistory.csv [pearlJam]
+BF 4: Assign Food class, foodHistory.csv,MenuItem.csv,HeavensDoor(AssignRF)
+BF 5: MoodyBlue class, foodHistory.csv [MoodyBlue.main(new String[]{})]
+BF 6: AssignFood class, MenuItem.csv, Milagro Man class [AssignFood.viewRestaurantMenu(),MilagroMan.main(new String[]{})]
+BF 7: Graph class(method: Kruskal,nonKruskal,displayKruskal,displayNonKruskal [map.displayKruskal(), map.displayNonKruskal()]
+BF 8: Run class(Main class), MapType inteface&class, SaveLoad class, progress.json]
+
+[]:method in jojoLand (ctrl+f)
+
+EX1:
+Dirty Deeds Done Dirt Cheap (4): 
+Graph class(method:findAllPath,findAllPathDFS,findTopShortestPath) [dirtyDeedsDoneDirtCheap]
+
+EX2:
+Stay the Hell Away from Me (6)
+Graph class(method: findAllPath,stayAway) [stayTheHellAway]
+
+EX3:
+The Golden Spirit (7)
+TheGoldenSpirit class [TheGoldenSpirit.main(new String[]{}), joestarAncestor()]
+
+EX 4:
+Vento Aureo (9)
+VentoAureo class[VentoAureo.main(new String[]{},map)]
+
+EX 5:
+Another One Bites the Dust (1)
+
+?EX 5:
+File saving
+foodHistory.csv, MenuItem.csv,combinedRS.csv
