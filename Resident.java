@@ -6,6 +6,10 @@ import java.util.Map;
 
 class Resident {
     private String name;
+    private String age;
+    private String gender;
+    private String residentialArea;
+    private String parents;
     private List<String> restaurantHistory;
     private List<String> foodHistory;
     private Map<String, Integer> foodFrequency;
@@ -16,9 +20,32 @@ class Resident {
         foodHistory = new ArrayList<>();
         foodFrequency = new HashMap<>();
     }
+    public Resident(String name, String age, String gender, String residentialArea, String parents) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.residentialArea = residentialArea;
+        this.parents = parents;
+    }
 
     public String getName() {
         return name;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getResidentialArea() {
+        return residentialArea;
+    }
+
+    public String getParents() {
+        return parents;
     }
 
     public void addRestaurantToHistory(String restaurantName) {

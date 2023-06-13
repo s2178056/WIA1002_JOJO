@@ -1,6 +1,3 @@
-
-package heavensdoor;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -78,9 +75,9 @@ public class CombineResidentsStands {
                 }
                 
                 else if(residentWithStand.getStand() != null){
-                writer.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
-                resident.getName(), resident.getAge(), resident.getGender(), resident.getResidentialArea(), resident.getParents(),
-                stand.getStand(), stand.getDestructivePower(), stand.getSpeed(), stand.getRange(), stand.getStamina(), stand.getPrecision(), stand.getDevelopmentPotential()));
+                    writer.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                    resident.getName(), resident.getAge(), resident.getGender(), resident.getResidentialArea(), resident.getParents(),
+                    stand.getStand(), stand.getDestructivePower(), stand.getSpeed(), stand.getRange(), stand.getStamina(), stand.getPrecision(), stand.getDevelopmentPotential()));
                 }
             }
         } catch (IOException e) {
@@ -90,41 +87,6 @@ public class CombineResidentsStands {
     }
 }
     
-class Resident{
-    private String name;
-    private String age;
-    private String gender;
-    private String residentialArea;
-    private String parents;
-        
-    public Resident(String name, String age, String gender, String residentialArea, String parents) {
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.residentialArea = residentialArea;
-        this.parents = parents;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public String getResidentialArea() {
-        return residentialArea;
-    }
-
-    public String getParents() {
-        return parents;
-    }        
-}
 
 class Stands{
     private String stand;
