@@ -16,7 +16,6 @@ public class jojoLand {
     private HeavensDoor heavensDoor = new HeavensDoor();
     private PearlJam pearlJam = new PearlJam();
     private AssignFood assignFood= new AssignFood();
-    public static int foodCount=0;
 
 
     public jojoLand(Graph map) {
@@ -84,11 +83,10 @@ public class jojoLand {
                         System.out.println();
                         System.out.println("[2] View Resident Information");
                         System.out.println("[3] The Hand");
-                        System.out.println("[4] Thus Spoke Rohan Kishibe");
-                        System.out.println("[5] Back (" + viewBack() + ")");
-                        System.out.println("[6] Back to Town Hall");
+                        System.out.println("[4] Back (" + viewBack() + ")");
+                        System.out.println("[5] Back to Town Hall");
                         if (!forwardStack.empty()) {
-                            System.out.println("[7] Forward (" + viewForward() + ")");
+                            System.out.println("[6] Forward (" + viewForward() + ")");
                         }
                         System.out.print("Select: ");
                         input = sc.nextLine();
@@ -101,23 +99,12 @@ public class jojoLand {
                                 map.displayNonKruskal();
                                 break;
                             case "4":
-////                            System.out.print("Enter the locations: ");
-////                            List<String> locations = new ArrayList<>();
-////                            locations.add("Jade Garden");
-////                            locations.add("Libeccio");
-////                            locations.add("Vineyard");
-////                            List<List<String>> allPaths = map.findAllPaths("Source", locations);
-////                            List<List<String>> topShortestPaths = map.findTopShortestPaths(allPaths);
-//
-//                            map.displayShortestPaths(topShortestPaths);
-                                break;
-                            case "5":
                                 moveBack();
                                 break;
-                            case "6":
+                            case "5":
                                 backToTownHall();
                                 break;
-                            case "7":
+                            case "6":
                                 moveForward();
                                 break;
                             default:
@@ -149,7 +136,7 @@ public class jojoLand {
                                 map.displayKruskal();
                                 break;
                             case "4":
-                                biteTheDust();
+                                BiteTheDust.main(new String[]{});
                                 break;
                             case "5":
                                 moveBack();
@@ -395,7 +382,6 @@ public class jojoLand {
                                 break;
                         }
                         break;
-
                     default:
                         choices = map.getChoices(currentLocation);
                         System.out.println("Current Location: " + currentLocation);
@@ -475,6 +461,7 @@ public class jojoLand {
             return "No history location available.";
         }
     }
+
 
     public String viewForward(){
         if (!forwardStack.isEmpty()) {
@@ -588,50 +575,11 @@ public class jojoLand {
         jojoLand.dayCount = dayCount;
     }
 
-    public void joestarAncestor(){
+    public void joestarAncestor() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the name of Joestar to print his/her ancestor: ");
-        String joestarName=sc.nextLine();
+        String joestarName = sc.nextLine();
         TheGoldenSpirit.printAncestor(joestarName);
-    }
-
-    public void biteTheDust(){
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Enter Yoshikage Kira's path: ");
-        String path = sc.nextLine();
-
-        String[] pathArray = path.split(" >");
-
-        String longestRepeatedPath = "";
-        int maxLength = 0;
-        Set<String> visitedPath = new HashSet<>();
-        boolean hasRepeat = false;
-
-        for (int i = 0; i < pathArray.length - 1; i++) {
-            StringBuilder currPath = new StringBuilder(pathArray[i]);
-            for (int j = i + 1; j < pathArray.length; j++) {
-                currPath.append(" >").append(pathArray[j]);
-                if (!visitedPath.contains(currPath.toString())) {
-                    visitedPath.add(currPath.toString());
-                } else {
-                    hasRepeat = true;
-                    if (currPath.length() > maxLength) {
-                        longestRepeatedPath = currPath.toString();
-                        maxLength = currPath.length();
-                    }
-                }
-            }
-        }
-        if (hasRepeat){
-            System.out.println("======================================================================");
-            System.out.println("Bites the Dust is most likely to be activated when Kira passed through" + longestRepeatedPath);
-            System.out.println("======================================================================");
-        } else {
-            System.out.println("======================================================================");
-            System.out.println("Bites the Dust is not activated.");
-            System.out.println("======================================================================");
-        }
     }
 
     public void stayTheHellAway(){
@@ -646,7 +594,7 @@ public class jojoLand {
         for (String location : identifiedLocationsStr.split(",")) {
             identifiedArr.add(location.trim());
         }
-        System.out.println("==============================================================================================================");
+        System.out.println("=================================================================================");
         List<List<String>> allPaths = map.findAllPaths(sourceName, destinationName);
         List<String> shortestPath = map.stayAway(allPaths,identifiedArr);
         if (shortestPath.isEmpty()) {
