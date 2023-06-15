@@ -30,6 +30,7 @@ public class jojoLand {
             MenuItem.createMenu();
         }
         while (!quit) {
+            CombineResidentsStands.main(new String[]{});
             AssignFood.main(new String[]{});
             boolean exit= false;
             while (!exit) {
@@ -332,6 +333,13 @@ public class jojoLand {
                                 break;
                             case "3":
                                 VentoAureo.main(new String[]{},map);
+                                if (VentoAureo.shouldReturn()) {
+                                    break;
+                                }
+                                if (VentoAureo.shouldEnd()) {
+                                    break;
+                                }
+                                break;
                             case "4":
                                 moveBack();
                                 break;
@@ -394,6 +402,7 @@ public class jojoLand {
                         }
                         System.out.print("Select: ");
                         input = sc.nextLine();
+
                         System.out.println("=================================================================================");
                         switch (input) {
                             case "2":
@@ -533,6 +542,7 @@ public class jojoLand {
     }
 
     public void pearlJam(String currentLocation, int day){
+        System.out.println("Restaurant: " + currentLocation + "\n");
         List<PearlJam.Resident> waitingList = PearlJam.getWaitingList(day, currentLocation);
         PearlJam.printWaitingList(waitingList);
         PearlJam.printOrderProcessingList(PearlJam.generateOrderProcessingList(waitingList,currentLocation));
@@ -541,9 +551,9 @@ public class jojoLand {
     public void dirtyDeedsDoneDirtCheap() {
         try {
             Scanner sc = new Scanner(System.in);
-            System.out.println("Source: ");
+            System.out.print("Source: ");
             String source = sc.nextLine();
-            System.out.println("Destination: ");
+            System.out.print("Destination: ");
             String destination = sc.nextLine();
             List<List<String>> allPaths = map.findAllPaths(source, destination);
             List<List<String>> shortestPaths = map.findTopShortestPaths(allPaths);

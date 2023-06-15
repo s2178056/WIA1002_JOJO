@@ -194,20 +194,19 @@
 
         public void displayStayOptimalPath(List<String> path){
             System.out.println("Optimal Path:");
-            System.out.println("=================================================================================");
             int distance = calculatePathDistance(path);
-            System.out.printf(" %s (%d km)%n", formatPathString(path), distance);
+            System.out.printf("%s (%d km)%n", formatPathString(path), distance);
             System.out.println("=================================================================================");
         }
 
         public void displayRohanShortestPaths(List<String> locations) {
             String source = "Morioh Grand Hotel";
             System.out.println("Shortest Path:");
-            System.out.println("======================================================================");
+            System.out.println("=================================================================================");
                 int distance = calculatePathDistance(locations);
                 System.out.printf("%s (%d km)%n", formatPathString(locations), distance);
 
-            System.out.println("======================================================================");
+            System.out.println("=================================================================================");
         }
 
         public  List<String> stayAway(List<List<String>> dfs,List<String> arr) {
@@ -277,10 +276,10 @@
             for (int i = 0; i < kruskal.size(); i++) {
                 Edge edge = kruskal.get(i);
                 totalLength += edge.distance;
-                System.out.println((i + 1) + ". " + edge.source + " -- " + edge.destination + "(" + edge.distance + "km)");
+                System.out.println((i + 1) + ". " + edge.source + " --- " + edge.destination + " (" + edge.distance + " km)");
             }
             System.out.println();
-            System.out.println("Total length: " + totalLength + "km");
+            System.out.println("Total length: " + totalLength + " km");
             System.out.println("=".repeat(70));
         }
 
@@ -297,10 +296,10 @@
             for (int i = 0; i < kruskal.size(); i++) {
                 Edge edge = kruskal.get(i);
                 totalLength += edge.distance;
-                System.out.println((i + 1) + ". " + edge.source + " -- " + edge.destination + "(" + edge.distance + "km)");
+                System.out.println((i + 1) + ". " + edge.source + " --- " + edge.destination + " (" + edge.distance + " km)");
             }
             System.out.println();
-            System.out.println("Total length: " + totalLength + "km");
+            System.out.println("Total length: " + totalLength + " km");
             System.out.println("=================================================================================");
         }
 

@@ -11,7 +11,7 @@ public class Run {
         System.out.println("[3] Exit");
         System.out.print("Select: ");
         String menuChoice = scanner.nextLine();
-        System.out.println("=".repeat(70));
+        System.out.println("=================================================================================");
         if (menuChoice.equalsIgnoreCase("1")) {
             String mapChoice = displayMapSelectionMenu(scanner);
             switch (mapChoice) {
@@ -43,7 +43,6 @@ public class Run {
         }
         scanner.close();
     }
-
 
     public static String displayMapSelectionMenu(Scanner scanner) {
         System.out.println("Select a map:");

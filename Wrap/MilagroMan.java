@@ -14,19 +14,17 @@ public class MilagroMan {
         int startDay = 0;
         int endDay = 0;
         while (!quit) {
-            System.out.println("==============================================================================");
-            System.out.println("Restaurant: " + jojoLand.getCurrentLocation() + "(Milagro Man Mode)");
+            System.out.println("Restaurant: " + jojoLand.getCurrentLocation() + " (Milagro Man Mode)");
             System.out.println("[1] Modify Food Prices");
             System.out.println("[2] View Sales Information");
             System.out.println("[3] Exit Milagro Man");
             System.out.print("Select: ");
             String input = sc.nextLine();
-            System.out.println("==============================================================================");
             switch (input) {
                 case "1":
                     System.out.print("Enter Food Name:");
                     foodModify = sc.nextLine();
-                    System.out.print("Enter new Price: ");
+                    System.out.print("Enter new Price: $");
                     foodPriceModify = sc.nextDouble();
                     System.out.print("Enter Start Day: ");
                     startDay = sc.nextInt();
@@ -35,11 +33,9 @@ public class MilagroMan {
                     sc.nextLine();
                     break;
                 case "2":
-                    System.out.println("==============================================================================");
                     milagroMoodyBlue(foodModify, foodPriceModify, startDay, endDay);
                     break;
                 case "3":
-                    System.out.println("==============================================================================");
                     quit = true;
                     break;
                 default:
@@ -73,7 +69,6 @@ public class MilagroMan {
         Scanner input = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
-            System.out.println("==============================================================================");
             System.out.println("Restaurant: " + jojoLand.getCurrentLocation());
             System.out.println("Sales Information");
             System.out.println("[1] View Sales");

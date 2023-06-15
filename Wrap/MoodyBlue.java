@@ -26,7 +26,7 @@ public class MoodyBlue {
         Scanner input = new Scanner(System.in);
         boolean exit=false;
         while(!exit) {
-            System.out.println("==============================================================================");
+            System.out.println("=================================================================================");
             System.out.println("Restaurant: " + jojoLand.getCurrentLocation());
             System.out.println("Sales Information");
             System.out.println("[1] View Sales");
@@ -50,7 +50,7 @@ public class MoodyBlue {
                         System.out.println("Invalid Day");
                         break;
                     }
-                    System.out.println("==============================================================================");
+                    System.out.println("=================================================================================");
                     System.out.println("Restaurant: "+jojoLand.getCurrentLocation());
                     System.out.println("Day "+selectedDay+" Sales");
                     System.out.println("+-------------------------------------+------------+-----------------+");
@@ -290,7 +290,7 @@ public class MoodyBlue {
                     System.out.println("+--------------------------------------------------------------------+");
                 }
                 case "3"->{
-                    System.out.println("==============================================================================");
+                    System.out.println("=================================================================================");
                     exit=true;
                 }
                 default -> {

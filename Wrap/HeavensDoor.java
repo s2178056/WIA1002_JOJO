@@ -2,51 +2,69 @@ import java.io.IOException;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
+
 
 public class HeavensDoor {
+    public PearlJam pearlJam= new PearlJam();
 
-    //Method for sorting and printing the table
-    public static void sort(String sortingOrder, String residentialArea) {
-        String split[] = sortingOrder.split("; ");
-        String[][] ary = residentsArray(residentialArea);
-        int index = 0;
-        int categories[] = new int[split.length];
-        int orders[] = new int[split.length];
+    public void main() {
 
-        for (int i = 0; i < split.length; i++) {
-            String fieldOrder[] = split[i].split(" \\(");
+        printResidentProfile("Joseph Joestar");
+        printResidentInfo(residentsArray("San Giorgio Maggiore"), "San Giorgio Maggiore");
+        sort("Age (ASC); Precision (DESC); Stand (ASC);", "San Giorgio Maggiore");
 
-            // To find category index in the array for each sorting according to the sorting priority
-            int category = findCategoryIndex(fieldOrder[0]);
-            // To find whether it is asc or desc for each sorting
-            int order = compareOrder(fieldOrder[1]);
-
-            if (category >= 0 && order != 0) {
-                categories[index] = category;
-                orders[index] = order;
-                index++;
-            } else if (category < 0) {
-                System.out.println("Invalid Field's Name > " + split[i]);
-            } else if (order == 0) {
-                System.out.println("Invalid Order's String > " + split[i]);
-            }
-        }
-        // Swap for the first field
-        swapFirstField(ary, categories[0], orders[0]);
-        // Swap for the rest of the field
-        if (index > 0) {
-            for (int i = 1; i < split.length; i++) {
-                swapOtherField(ary, categories[i - 1], categories[i], orders[i]);
-            }
-        }
-        System.out.println("----Sorted----");
-        printResidentInfo(ary, residentialArea);
     }
 
+    //Method for sorting and printing the table
+    public static void sort(String sortingOrder, String residentialArea){
+        String split[] = sortingOrder.split(" ");
+        String[][] ary = residentsArray(residentialArea);
+        int numOfField = split.length/2;
+        int categoryIdx = 0;
+        int orderIdx = 0;
+        int categories[] = new int[numOfField];
+        int orders[] = new int [numOfField];
+        for(int i=0; i<split.length; i++){
+            //To find category index in the array for each sorting according to the sorting priority
+            int idxToSkip = -1;
+            if(i%2 == 0){
+                int category = findCategoryIndex(split[i]);
+                if(category > 0){
+                    categories[categoryIdx] = category;
+                    categoryIdx++;
+                }
+                else {
+                    System.out.println("Invalid Field's Name > " + category);
+                    idxToSkip = (i+1);
+                }
+            }
+            //To find whether is asc or desc for each sorting
+            else {
+                if(i == idxToSkip){
+                    continue;
+                }
+                int order = compareOrder(split[i]);
+                orders[orderIdx] = order;
+                orderIdx++;
+            }
+        }
+        //Swap for the first field
+        swapFirstField(ary, categories[0], orders[0]);
+        //Swap for the rest of the field
+        if(categoryIdx>0){
+            for(int i=1; i<numOfField; i++){
+                swapOtherField(ary, categories[i-1], categories[i], orders[i]);
+            }
+        }
+        printResidentInfo(ary, residentialArea);
+    }
 
     //Method to print resident infomation
     public static void printResidentInfo (String[][] residentsArray, String residentialArea){
 
+        // Table headers
         System.out.println("Resident Information in " + residentialArea);
         System.out.println("+----+---------------------------+-----+--------+------------------------+-------------------+----------+----------+----------+-----------+-----------------------+");
         System.out.println("| No | Name                      | Age | Gender | Stand                  | Destructive Power | Speed    | Range    | Stamina  | Precision | Development Potential |");
@@ -59,7 +77,7 @@ public class HeavensDoor {
     }
 
     //Method to print resident profile
-    public static void printResidentProfile(String name){
+    public void printResidentProfile (String name){
         boolean found=false;
         try(BufferedReader read = new BufferedReader(new FileReader("combinedRS.csv"))){
             String line;
@@ -182,24 +200,14 @@ public class HeavensDoor {
     }
 
     //To compare two string
-    private static int comparable(String value1, String value2) {
-      
-      // Null or N/A has the lowest priority
-        if (value1.equalsIgnoreCase("n/a") || value1.equalsIgnoreCase("null")) {
-            if (value2.equalsIgnoreCase("n/a") || value2.equalsIgnoreCase("null")) {
-                return 0; 
-            } else {
-                return 1; 
-            }
-        } else if (value2.equalsIgnoreCase("n/a") || value2.equalsIgnoreCase("null")) {
-            return -1;
-        } else {
-            return value1.compareToIgnoreCase(value2); 
-        }
+    private static int comparable(String value1, String value2){
+        if(value1.equalsIgnoreCase("n/a")||value1.equalsIgnoreCase("null")){return 1;}
+        else if(value2.equalsIgnoreCase("n/a")||value2.equalsIgnoreCase("null")){return -1;}
+        else return value1.compareTo(value2);
     }
 
-
     //To compare Age parameter
+    //if age1 smaller -1
     private static int comparableAge(String age1, String age2){
         if(age1.equalsIgnoreCase("n/a")){return 1;}
         else if(age2.equalsIgnoreCase("n/a")){return -1;}
@@ -255,7 +263,7 @@ public class HeavensDoor {
         order = order.toLowerCase();
         if (order.contains("asc")){return 1;}
         else if (order.contains("desc")){return -1;}
-        else return 0;
+        return 0;
     }
 
     //Method to count total row for residents in a specific area

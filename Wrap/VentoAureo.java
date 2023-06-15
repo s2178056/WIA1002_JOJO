@@ -4,25 +4,37 @@ public class VentoAureo {
     private static List<String> uncategorized = new ArrayList<>();
     private static Map<String, Map<String, Integer>> roads = new HashMap<>();
     private static int districtCount = 1;
+    private static boolean shouldReturn = false;
+    private static boolean shouldEnd = false;
+    private static boolean flag = false;
 
     public static void main(String[] args,Graph jojoMap) {
         Graph map=jojoMap;
         List<String> town=map.getAllTowns();
         List<Graph.Edge> road=map.getAllRoads();
-        initializeGraph(town,road);
+        if(!flag)
+            initializeGraph(town,road);
         Scanner scanner = new Scanner(System.in);
         while (!uncategorized.isEmpty() || districts.size() > 1) {
             System.out.print("Combine: ");
             String line = scanner.nextLine();
             if (line.equalsIgnoreCase("exit") || line.equalsIgnoreCase(" exit") || line.equalsIgnoreCase("exit ") ) {
-                System.out.println("=============================================================================================================");
+                System.out.println("=================================================================================");
+                shouldReturn = true;
                 break;
+            }
+            if(!line.contains("&")){
+                System.out.println("Invalid Input");
+                continue;
             }
             String[] arr = line.split(" & ");
             String location1 = arr[0];
             String location2 = arr[1];
             combineLocations(location1, location2);
-            System.out.println("=============================================================================================================");
+            System.out.println("=================================================================================");
+
+            if(shouldEnd)
+                return;
         }
     }
 
@@ -33,6 +45,7 @@ public class VentoAureo {
        for (Graph.Edge road:roads){
            addRoad(road.getSource(),road.getDestination(),road.getDistance());
        }
+       flag = true;
     }
 
     private static void addTown(String town) {
@@ -125,9 +138,15 @@ public class VentoAureo {
         }
 
         if(uncategorized.size() == 0 && (districtIndex-1) == 1) {
-            System.out.println("=============================================================================================================");
-            System.exit(0);
+            shouldEnd = true;
         }
+    }
+
+    public static boolean shouldReturn() {
+        return shouldReturn;
+    }
+    public static boolean shouldEnd() {
+        return shouldEnd;
     }
 }
 

@@ -138,7 +138,6 @@ public class PearlJam {
                         orderProcessingList.add(females.remove(females.size() - 1));
                     }
                 }
-                // Add the naAges list to the end of the orderProcessingList
                 orderProcessingList.addAll(naAges);
                 break;
             case "Libeccio":
@@ -178,7 +177,7 @@ public class PearlJam {
     }
 
     private static int getDayCount() {   //*** to amend
-        return jojoLand.getDayCount();
+        return jojoLand.getDayCount() + 1;
     }
 
 
@@ -219,31 +218,17 @@ public class PearlJam {
         } else {
             System.out.println("+----+-------------------------+-----+--------+------------------------------------------+");
         }
-        System.out.println("=====================================================================================================");
+        System.out.println("=================================================================================");
     }
-
-    public static void main(String[] args) {   //*** to amend
-        String restaurant = "Jade Garden";  // to amend
-        int day = getDayCount();
-        System.out.println("Restaurant: " + restaurant + "\n");
-        List<Resident> waitingList = getWaitingList(day, restaurant);
-        printWaitingList(waitingList);
-        printOrderProcessingList(generateOrderProcessingList(waitingList,restaurant));
-    }
-
 
     static class Resident {
-        //        private static List<Resident> allResidents = new ArrayList<>();
+
         private String name;
         private String age;
         private String gender;
         private String restaurant;
         private String order;
         LocalTime time;
-//        private static List<String[]> orderHistory;
-//        private Map<String, Integer> foodCounters;
-//        private String lastRestaurant;
-//        private int foodCount;
 
         public Resident(String name, String age, String gender,String order,LocalTime time) {
             this.name = name;
@@ -252,20 +237,6 @@ public class PearlJam {
             this.order = order;
             this.time = time;
         }
-
-//        public Resident(String name) {
-//            this.name = name;
-//            this.orderHistory = new ArrayList<>();
-//            this.lastRestaurant = "";
-//            this.foodCounters = new HashMap<>();
-//            foodCount = 0;
-//            allResidents.add(this);
-//        }
-//
-//        public Resident(String name, double budget) {
-//            this.name = name;
-//            this.budget = budget;
-//        }
 
         public String getName() {
             return name;
@@ -286,57 +257,7 @@ public class PearlJam {
         public String getOrder(){return order;}
 
         public LocalTime getTime(){return time;}
-//        public MenuItem getMenu() {
-//            return menu;
-//        }
-//
-//        public void setMenu(MenuItem menuItem) {
-//            this.menu = menuItem;
-//        }
-//
-//        public void addToOrderHistory(String[] order) {
-//            orderHistory.add(order);
-//        }
-//
-//        public static List<String[]> getOrderHistory() {
-//            return orderHistory;
-//        }
-//
-//        public static List<Resident> getAllResidents() {
-//            return allResidents;
-//        }
-//
-//        public static void setAllResident(List<Resident> list){
-//            allResidents=list;
-//        }
-//
-//        public String getLastRestaurant() {
-//            return lastRestaurant;
-//        }
-//
-//        public void setLastRestaurant(String lastRestaurant) {
-//            this.lastRestaurant = lastRestaurant;
-//        }
-//
-//        public void incrementFoodCounter(String food) {
-//            foodCounters.put(food, foodCounters.getOrDefault(food, 0) + 1);
-//        }
-//
-//        public int getFoodCounter(String food) {
-//            return foodCounters.getOrDefault(food, 0);
-//        }
-//
-//
-//        public void removeOrderHistoryEntry(String day) {
-//            Iterator<String[]> iterator = orderHistory.iterator();
-//            while (iterator.hasNext()) {
-//                String[] entry = iterator.next();
-//                if (entry[0].equals(day)) {
-//                    iterator.remove();
-//                    break;
-//                }
-//            }
-//        }
+
     }
 
 }
