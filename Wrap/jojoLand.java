@@ -97,7 +97,7 @@ public class jojoLand {
                                 viewResidentInfo(currentLocation);
                                 break;
                             case "3":
-                                map.displayNonKruskal();
+                                map.displayTheHand();
                                 break;
                             case "4":
                                 moveBack();
@@ -134,7 +134,7 @@ public class jojoLand {
                                 viewResidentInfo(currentLocation);
                                 break;
                             case "3":
-                                map.displayKruskal();
+                                map.displayRedHotChiliPepper();
                                 break;
                             case "4":
                                 BiteTheDust.main(new String[]{});

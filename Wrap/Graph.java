@@ -72,7 +72,7 @@
 
 
 
-        public static List<Edge> Kruskal(List<Edge> edges) { //implement kruskal's logic
+        public static List<Edge> redHotChiliPepper(List<Edge> edges) { //implement kruskal's logic
             edges.sort(Comparator.comparingInt(edge -> edge.distance)); // Sort edges by weight
             List<Edge> minimumSpanningTree = new ArrayList<>(); // to store the edges of the minimum spanning tree
             Map<String, Integer> parent = new HashMap<>(); // to store parent of vertex
@@ -99,13 +99,12 @@
             return minimumSpanningTree;
         }
 
-        public static List<Edge> nonKruskal(List<Edge> edges) {
+        public static List<Edge> theHand(List<Edge> edges) {
             // Sort edges by weight
             Collections.sort(edges, Collections.reverseOrder());
             List<String> vertices = new ArrayList<>(); // to store vertices
             List<Integer> parent = new ArrayList<>();// to store parent of vertex
             List<Edge> longestPath = new ArrayList<>();
-            List<Edge> kruskal = new ArrayList<>(); // to store the edges of the minimum spanning tree
             List<Edge> nonMSTEdges = new ArrayList<>(); // to store the non-MST edges
             Set<String> visitedEdges = new HashSet<>(); // to track visited edges
             for (Edge edge : edges) {
@@ -263,13 +262,13 @@
             visited.remove(current);
         }
 
-        public void displayKruskal() {
+        public void displayRedHotChiliPepper() {
             List<Edge> edges = new ArrayList<>();
             for (List<Edge> alledges : graph.values()) {
                 edges.addAll(alledges);
             }
             System.out.println("Necessary Power Cables to be Upgraded: ");
-            List<Edge> kruskal = Kruskal(edges);
+            List<Edge> kruskal = redHotChiliPepper(edges);
 
             int totalLength = 0;
 
@@ -283,13 +282,13 @@
             System.out.println("=".repeat(70));
         }
 
-        public void displayNonKruskal() {
+        public void displayTheHand() {
             List<Edge> edges = new ArrayList<>();
             for (List<Edge> alledges : graph.values()) {
                 edges.addAll(alledges);
             }
             System.out.println("Unnecessary Water Connections: ");
-            List<Edge> kruskal = nonKruskal(edges);
+            List<Edge> kruskal = theHand(edges);
 
             int totalLength = 0;
 
