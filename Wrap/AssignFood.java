@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.List;
@@ -234,6 +235,7 @@ public class AssignFood {
     public static void viewRestaurantMenu(String restaurant){
         Scanner sc = new Scanner(System.in);
         boolean exit=false;
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
         while(!exit) {
             List<MenuItem> availableMenu = MenuItem.getRestaurantMenu(restaurant);
             int i = 1;
@@ -242,7 +244,7 @@ public class AssignFood {
             System.out.println("|Food                                 | Price      |");
             System.out.println("+-------------------------------------+------------+");
             for (MenuItem menuItem : availableMenu) {
-                System.out.printf("|%-37s|  %-10s|\n", menuItem.getName(), menuItem.getPrice());
+                System.out.printf("|%-37s|  %-10s|\n", menuItem.getName(), decimalFormat.format(menuItem.getPrice()));
             }
             System.out.println("+--------------------------------------------------+");
             System.out.println("=================================================================================");
@@ -369,9 +371,8 @@ class MenuItem {
             writer.write("Jade Garden,Braised Chicken in Black Bean Sauce,15.00\n");
             writer.write("Jade Garden,Braised Goose Web with Vermicelli,21.00\n");
             writer.write("Jade Garden,Deep-fried Hiroshima Oysters,17.00\n");
-            writer.write("Jade Garden,Poached Tofu with Dried Shrimps,2.00\n");
+            writer.write("Jade Garden,Poached Tofu with Dried Shrimps,12.00\n");
             writer.write("Jade Garden,Scrambled Egg White with Milk,10.00\n");
-            writer.write("Cafe Deux Magots,Sampling Matured Cheese Platter,23.00\n");
             writer.write("Cafe Deux Magots,Sampling Matured Cheese Platter,23.00\n");
             writer.write("Cafe Deux Magots,Spring Lobster Salad,35.00\n");
             writer.write("Cafe Deux Magots,Spring Organic Omelette,23.00\n");

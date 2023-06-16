@@ -31,11 +31,14 @@ public class MilagroMan {
                     System.out.print("Enter End Day: ");
                     endDay = sc.nextInt();
                     sc.nextLine();
+                    System.out.println("==============================================================================");
                     break;
                 case "2":
                     milagroMoodyBlue(foodModify, foodPriceModify, startDay, endDay);
+                    System.out.println("=================================================================================");
                     break;
                 case "3":
+                    System.out.println("==============================================================================");
                     quit = true;
                     break;
                 default:
@@ -69,6 +72,7 @@ public class MilagroMan {
         Scanner input = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
+            System.out.println("==============================================================================");
             System.out.println("Restaurant: " + jojoLand.getCurrentLocation());
             System.out.println("Sales Information");
             System.out.println("[1] View Sales");
@@ -78,7 +82,7 @@ public class MilagroMan {
             System.out.println("    [C] Top k Highest Sales");
             System.out.println("    [D] Total and Average Sales");
             System.out.println("[3] Exit");
-            System.out.println("Select: ");
+            System.out.print("Select: ");
             String selection2 = input.nextLine();
             DecimalFormat decimalFormat = new DecimalFormat("0.00");
             switch (selection2) {
@@ -95,6 +99,7 @@ public class MilagroMan {
                         System.out.println("Invalid Day");
                         break;
                     }
+                    System.out.println("==============================================================================");
                     System.out.println("Restaurant: " + jojoLand.getCurrentLocation());
                     System.out.println("Day " + selectedDay + " Sales");
                     System.out.println("+-------------------------------------+------------+-----------------+");
@@ -123,6 +128,9 @@ public class MilagroMan {
                             }
                         } else {
                             if (restaurant.equalsIgnoreCase(jojoLand.getCurrentLocation()) && day == selectedDay) {
+                                if(!foodMenu.contains(foodName)){
+                                    foodMenu.add(foodName);
+                                }
                                 foodQuantity.put(foodName, foodQuantity.getOrDefault(foodName, 0) + 1);
                                 foodPrice.put(foodName, price);
                                 totalDaySales += price;
@@ -223,6 +231,7 @@ public class MilagroMan {
                             }
                         }
                     }
+                    System.out.println("==============================================================================");
                     System.out.println("Minimum Sales: Day " + minDay);
                     System.out.println("+-------------------------------------+------------+-----------------+");
                     System.out.println("|Food                                 |  Quantity  |    Total Price  |");
@@ -321,6 +330,7 @@ public class MilagroMan {
                             }
                         }
                     }
+                    System.out.println("==============================================================================");
                     System.out.println("Maximum sales: Day " + maxDay);
                     System.out.println("+-------------------------------------+------------+-----------------+");
                     System.out.println("|Food                                 |  Quantity  |    Total Price  |");
@@ -402,6 +412,7 @@ public class MilagroMan {
                             kFoodPriceName = food;
                         }
                     }
+                    System.out.println("==============================================================================");
                     System.out.println("Food With Highest Quantity:");
                     System.out.println("+-------------------------------------+------------+");
                     System.out.println("|Food                                 |  Quantity  |");
@@ -469,6 +480,7 @@ public class MilagroMan {
                             }
                         }
                     }
+                    System.out.println("==============================================================================");
                     System.out.println("Total and Average Sales: (Day " + startDay + " - " + endDay + ")");
                     System.out.println("+-------------------------------------+------------+-----------------+");
                     System.out.println("|Food                                 |  Quantity  |    Total Price  |");
@@ -494,7 +506,6 @@ public class MilagroMan {
         }
     }
 }
-
 
 
 

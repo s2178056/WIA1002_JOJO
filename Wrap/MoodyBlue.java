@@ -122,6 +122,7 @@ public class MoodyBlue {
                             totalDaySales += price;
                         }
                     }
+                    System.out.println("=================================================================================");
                     System.out.println("Minimum Sales: Day " + minDay);
                     System.out.println("+-------------------------------------+------------+-----------------+");
                     System.out.println("|Food                                 |  Quantity  |    Total Price  |");
@@ -180,6 +181,7 @@ public class MoodyBlue {
                             totalDaySales += price;
                         }
                     }
+                    System.out.println("=================================================================================");
                     System.out.println("Maximum sales: Day "+maxDay);
                     System.out.println("+-------------------------------------+------------+-----------------+");
                     System.out.println("|Food                                 |  Quantity  |    Total Price  |");
@@ -221,32 +223,33 @@ public class MoodyBlue {
                             }
                         }
                     }
-                        for (String food : foodQuantity.keySet()) {
-                            if (foodQuantity.get(food) > kFoodQuantity) {
-                                kFoodQuantity = foodQuantity.get(food);
-                                kFoodQuantityName = food;
-                            }
+                    for (String food : foodQuantity.keySet()) {
+                        if (foodQuantity.get(food) > kFoodQuantity) {
+                            kFoodQuantity = foodQuantity.get(food);
+                            kFoodQuantityName = food;
                         }
-                        for (String food : foodPrice.keySet()) {
-                            double totalPrice = foodPrice.get(food) * foodQuantity.get(food);
-                            if (totalPrice > kFoodPrice) {
-                                kFoodPrice = totalPrice;
-                                kFoodPriceName = food;
-                            }
+                    }
+                    for (String food : foodPrice.keySet()) {
+                        double totalPrice = foodPrice.get(food) * foodQuantity.get(food);
+                        if (totalPrice > kFoodPrice) {
+                            kFoodPrice = totalPrice;
+                            kFoodPriceName = food;
                         }
-                        System.out.println("Food With Highest Quantity:");
-                        System.out.println("+-------------------------------------+------------+");
-                        System.out.println("|Food                                 |  Quantity  |");
-                        System.out.println("+-------------------------------------+------------+");
-                        System.out.printf("|%-37s|  %-10d|\n", kFoodQuantityName, foodQuantity.get(kFoodQuantityName));
-                        System.out.println("+--------------------------------------------------+");
-                        System.out.println("");
-                        System.out.println("Food With Highest Total Price:");
-                        System.out.println("+-------------------------------------+------------+------------------+");
-                        System.out.println("|Food                                 |  Quantity  |    Total Price   |");
-                        System.out.println("+-------------------------------------+------------+------------------+");
-                        System.out.printf("|%-37s|  %-10d|  $%-15s|\n", kFoodPriceName, foodQuantity.get(kFoodPriceName), decimalFormat.format(kFoodPrice));
-                        System.out.println("+-------------------------------------+------------+------------------+");
+                    }
+                    System.out.println("=================================================================================");
+                    System.out.println("Food With Highest Quantity:");
+                    System.out.println("+-------------------------------------+------------+");
+                    System.out.println("|Food                                 |  Quantity  |");
+                    System.out.println("+-------------------------------------+------------+");
+                    System.out.printf("|%-37s|  %-10d|\n", kFoodQuantityName, foodQuantity.get(kFoodQuantityName));
+                    System.out.println("+--------------------------------------------------+");
+                    System.out.println("");
+                    System.out.println("Food With Highest Total Price:");
+                    System.out.println("+-------------------------------------+------------+------------------+");
+                    System.out.println("|Food                                 |  Quantity  |    Total Price   |");
+                    System.out.println("+-------------------------------------+------------+------------------+");
+                    System.out.printf("|%-37s|  %-10d|  $%-15s|\n", kFoodPriceName, foodQuantity.get(kFoodPriceName), decimalFormat.format(kFoodPrice));
+                    System.out.println("+-------------------------------------+------------+------------------+");
                 }
 
                 case "2D" -> {
@@ -274,6 +277,7 @@ public class MoodyBlue {
                             }
                         }
                     }
+                    System.out.println("=================================================================================");
                     System.out.println("Total and Average Sales: (Day " +startDay+" - "+endDay+")");
                     System.out.println("+-------------------------------------+------------+-----------------+");
                     System.out.println("|Food                                 |  Quantity  |    Total Price  |");
@@ -297,9 +301,8 @@ public class MoodyBlue {
                     System.out.println("Invalid Input");
                 }
             }
-                }
         }
     }
-
+}
 
 
