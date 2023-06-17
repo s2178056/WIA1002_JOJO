@@ -85,7 +85,8 @@ public class PearlJam {
             case "Trattoria Trussardi":
                 List<Resident> males = new ArrayList<>();
                 List<Resident> females = new ArrayList<>();
-                List<Resident> naAges = new ArrayList<>();
+                List<Resident> naAgesM = new ArrayList<>();
+                List<Resident> naAgesF = new ArrayList<>();
 
                 for (Resident resident : waitingList) {
                     if (resident.getGender().equals("Male")) {
@@ -112,19 +113,25 @@ public class PearlJam {
                 // Add residents with "N/A" age to the naAges list for each gender
                 for (Resident resident : males) {
                     if (resident.getAge().equals("N/A")) {
-                        naAges.add(resident);
+                        naAgesM.add(resident);
                     }
                 }
-                males.removeAll(naAges);
+                males.removeAll(naAgesM);
 
                 for (Resident resident : females) {
                     if (resident.getAge().equals("N/A")) {
-                        naAges.add(resident);
+                        naAgesF.add(resident);
                     }
                 }
-                females.removeAll(naAges);
+                females.removeAll(naAgesF);
 
-                while (!males.isEmpty() || !females.isEmpty()) {
+                while (!males.isEmpty() || !females.isEmpty() || !naAgesM.isEmpty() || !naAgesF.isEmpty()) {
+                    if(males.isEmpty() && !naAgesM.isEmpty()){
+                        orderProcessingList.add(naAgesM.remove(0));
+                    }
+                    if(females.isEmpty() && !naAgesF.isEmpty()){
+                        orderProcessingList.add(naAgesF.remove(0));
+                    }
                     if (!males.isEmpty()) {
                         orderProcessingList.add(males.remove(0));
                     }
@@ -137,8 +144,8 @@ public class PearlJam {
                     if (!females.isEmpty()) {
                         orderProcessingList.add(females.remove(females.size() - 1));
                     }
+
                 }
-                orderProcessingList.addAll(naAges);
                 break;
             case "Libeccio":
                 List<Resident> waitingListCopy = new ArrayList<>(waitingList);
