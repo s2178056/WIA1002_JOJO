@@ -125,42 +125,52 @@ public class PearlJam {
                 females.removeAll(naAgesF);
 
                 while (!males.isEmpty() || !females.isEmpty() || !naAgesM.isEmpty() || !naAgesF.isEmpty()) {
-                    if(males.isEmpty() && !naAgesM.isEmpty()){
-                        orderProcessingList.add(naAgesM.remove(0));
-                    }
-                    if(females.isEmpty() && !naAgesF.isEmpty()){
-                        orderProcessingList.add(naAgesF.remove(0));
-                    }
+
                     if (!males.isEmpty()) {
                         orderProcessingList.add(males.remove(0));
-                    }
-                    if (!females.isEmpty()) {
-                        orderProcessingList.add(females.remove(0));
-                    }
-                    if (!males.isEmpty()) {
-                        orderProcessingList.add(males.remove(males.size() - 1));
-                    }
-                    if (!females.isEmpty()) {
-                        orderProcessingList.add(females.remove(females.size() - 1));
+                    } else if(!naAgesM.isEmpty()){
+                        orderProcessingList.add(naAgesM.remove(0));
                     }
 
+                    if (!females.isEmpty()) {
+                        orderProcessingList.add(females.remove(0));
+                    } else if(!naAgesF.isEmpty()){
+                        orderProcessingList.add(naAgesF.remove(0));
+                    }
+
+                    if (!males.isEmpty()) {
+                        orderProcessingList.add(males.remove(males.size() - 1));
+                    } else if(!naAgesM.isEmpty()){
+                        orderProcessingList.add(naAgesM.remove(0));
+                    }
+
+                    if (!females.isEmpty()) {
+                        orderProcessingList.add(females.remove(females.size() - 1));
+                    } else if(!naAgesF.isEmpty()){
+                        orderProcessingList.add(naAgesF.remove(0));
+                    }
                 }
                 break;
             case "Libeccio":
                 List<Resident> waitingListCopy = new ArrayList<>(waitingList);
                 int dayNumber = getDayCount();
                 int index = 0;
-                int count = 1;
+                int count = 0;
                 while (!waitingListCopy.isEmpty()) {
+                    count++;
                     if (count % dayNumber == 0) {
                         Resident resident = waitingListCopy.remove(index);
                         orderProcessingList.add(resident);
                         index--;
                     }
-                    count++;
                     index++;
                     if (index >= waitingListCopy.size()) {
                         index = 0;
+                        count = 0;
+                    }
+                    if(waitingListCopy.size() < dayNumber){
+                        orderProcessingList.addAll(waitingListCopy);
+                        waitingListCopy.clear();
                     }
                 }
                 Collections.reverse(orderProcessingList);
