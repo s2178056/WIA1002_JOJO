@@ -110,7 +110,6 @@ public class PearlJam {
                     }
                 }).reversed());
 
-                // Add residents with "N/A" age to the naAges list for each gender
                 for (Resident resident : males) {
                     if (resident.getAge().equals("N/A")) {
                         naAgesM.add(resident);
@@ -251,7 +250,6 @@ public class PearlJam {
         private String name;
         private String age;
         private String gender;
-        private String restaurant;
         private String order;
         LocalTime time;
 
@@ -273,10 +271,6 @@ public class PearlJam {
 
         public String getGender() {
             return gender;
-        }
-
-        public String getRestaurant() {
-            return restaurant;
         }
 
         public String getOrder(){return order;}
