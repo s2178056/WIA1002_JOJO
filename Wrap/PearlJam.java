@@ -171,10 +171,28 @@ public class PearlJam {
                 dayNumber = getDayCount();
 
                 index = dayNumber - 1;
+                int direction = 1; // 1 represents forward direction, -1 represents reverse direction
                 while (!waitingListCopy2.isEmpty()) {
                     index %= waitingListCopy2.size();
-                    orderProcessingList.add(waitingListCopy2.remove(index));
-                    index += dayNumber - 1;
+
+                    if (index >= 0 && index < waitingListCopy2.size()) {
+                        orderProcessingList.add(waitingListCopy2.remove(index));
+                    }
+
+                    if (direction == 1) {
+                        index += dayNumber -1;
+                    } else {
+                        index -= dayNumber;
+                    }
+
+                    // Change direction when reaching the end of the queue
+                    if (index >= waitingListCopy2.size()) {
+                        direction = -1;
+                        index = waitingListCopy2.size() - dayNumber; // Start from the second-to-last person
+                    } else if (index < 0){
+                        direction = 1;
+                        index = dayNumber - 1;
+                    }
                 }
                 break;
             default:
